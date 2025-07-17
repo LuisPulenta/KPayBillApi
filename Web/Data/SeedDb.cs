@@ -3,6 +3,8 @@ using KPayBillApi.Web.Data.Entities;
 using KPayBillApi.Web.Helpers;
 using KPayBillApi.Common.Enums;
 using System;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace KPayBillApi.Web.Data
 {
@@ -21,7 +23,10 @@ namespace KPayBillApi.Web.Data
         {
             await _context.Database.EnsureCreatedAsync();
             await CheckRolesAsycn();
-            await CheckAdminKPAsync("Luis", "Núñez", "luisalbertonu@gmail.com", "351 681 4963", UserType.AdminKP);
+            await CheckCompaniesAsync();
+            Company keypress = await _context.Companies.FirstOrDefaultAsync(o => o.Id == 1);
+            await CheckAdminKPAsync("Luis", "Núñez", "luisalbertonu@gmail.com", "351 681 4963", UserType.AdminKP, keypress);
+            
         }
 
         //--------------------------------------------------------------------------------------------
@@ -33,12 +38,12 @@ namespace KPayBillApi.Web.Data
         }
 
         //--------------------------------------------------------------------------------------------
-        private async Task CheckAdminKPAsync(string firstName, string lastName, string email, string phoneNumber, UserType userType)
+        private async Task CheckAdminKPAsync(string firstName, string lastName, string email, string phoneNumber, UserType userType, Company? company)
         {
             DateTime ahora = DateTime.Now;
 
             User user = await _userHelper.GetUserAsync(email);
-            
+
             if (user == null)
             {
                 user = new User
@@ -49,6 +54,7 @@ namespace KPayBillApi.Web.Data
                     PhoneNumber = phoneNumber,
                     UserName = email,
                     UserType = userType,
+                    Company = company,
                     Active = true,
                 };
 
@@ -57,6 +63,28 @@ namespace KPayBillApi.Web.Data
 
                 string token = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
                 await _userHelper.ConfirmEmailAsync(user, token);
+            }
+        }
+
+        //--------------------------------------------------------------------------------------------
+        private async Task CheckCompaniesAsync()
+        {
+            if (!_context.Companies.Any())
+
+            {
+                DateTime ahora = DateTime.Now;
+                User user = await _userHelper.GetUserAsync("luisalbertonu@gmail.com");
+
+                _context.Companies.Add(new Company
+                {
+                    Cuil = "20-12345678-9",
+                    Name = "Keypress",
+                    Address = "Villa Santa Ana",
+                    Phone = "351 11223344",
+                    Active = true,
+                });
+
+                await _context.SaveChangesAsync();
             }
         }
     }
