@@ -258,7 +258,8 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
             List<User> users = await _context.Users
-
+                .Include(x => x.Company)
+                 .OrderBy(x => x.Company.Name + x.LastName + x.FirstName)
                 .ToListAsync();
 
             List<UserViewModel> list = new List<UserViewModel>();
@@ -274,6 +275,8 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
                     Email = user.Email,
                     EmailConfirm = user.EmailConfirmed,
                     PhoneNumber = user.PhoneNumber,
+                    CompanyId = user.Company != null ? user.Company.Id : 1,
+                    CompanyName = user.Company != null ? user.Company.Name : "KeyPress",
                     Active = user.Active,
                 };
 
