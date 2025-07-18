@@ -2,7 +2,7 @@
 
 namespace KPayBillApi.Web.Data.Entities
 {
-    public class UserCompany
+    public class AdminCompany
     {
         [Key]
         public int Id { get; set; }

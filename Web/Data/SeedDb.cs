@@ -55,6 +55,7 @@ namespace KPayBillApi.Web.Data
                     UserName = email,
                     UserType = userType,
                     Company = company,
+                    CompanyId=company.Id,
                     Active = true,
                 };
 

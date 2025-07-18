@@ -1,7 +1,4 @@
-﻿using KPayBillApi.Web.Data.Entities;
-using System.ComponentModel.DataAnnotations;
-
-namespace KPayBillApi.Web.Models
+﻿namespace KPayBillApi.Web.Models
 {
     public class UserViewModel
     {
@@ -16,5 +13,6 @@ namespace KPayBillApi.Web.Models
         public bool EmailConfirm { get; set; }
         public string PhoneNumber { get; set; }
         public bool Active { get; set; }
+        public string FullName => $"{FirstName} {LastName}";
     }
 }

@@ -8,6 +8,20 @@ namespace Web.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "AdminCompanies",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CompanyId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AdminCompanies", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -19,35 +33,6 @@ namespace Web.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Bills",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    IdCompany = table.Column<int>(type: "int", nullable: false),
-                    Cuil = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    BillDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Tipo = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
-                    Letra = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: false),
-                    PV = table.Column<int>(type: "int", nullable: false),
-                    Numero = table.Column<int>(type: "int", nullable: false),
-                    StrComprobante = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    ImporteNeto = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ImporteIVA = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ImporteTotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Archivo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OC = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DocContable = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Estado = table.Column<int>(type: "int", nullable: false),
-                    Motivo = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Bills", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -65,6 +50,33 @@ namespace Web.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Companies", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Reasons",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reasons", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserCompanies",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CompanyId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserCompanies", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -209,6 +221,52 @@ namespace Web.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Bills",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EmitterCompanyId = table.Column<int>(type: "int", nullable: false),
+                    EmitterCompanyName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReceiverCompanyId = table.Column<int>(type: "int", nullable: false),
+                    ReceiverCompanyName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Cuil = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    BillDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Tipo = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
+                    Letra = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: false),
+                    PV = table.Column<int>(type: "int", nullable: false),
+                    Numero = table.Column<int>(type: "int", nullable: false),
+                    StrComprobante = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    ImporteNeto = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ImporteIVA = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ImporteTotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Archivo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OC = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DocContable = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Estado = table.Column<int>(type: "int", nullable: false),
+                    Motivo = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bills", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Bills_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AdminCompanies_UserId_CompanyId",
+                table: "AdminCompanies",
+                columns: new[] { "UserId", "CompanyId" },
+                unique: true,
+                filter: "[UserId] IS NOT NULL");
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -254,6 +312,11 @@ namespace Web.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Bills_UserId",
+                table: "Bills",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Companies_Cuil",
                 table: "Companies",
                 column: "Cuil",
@@ -264,10 +327,26 @@ namespace Web.Migrations
                 table: "Companies",
                 column: "Name",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reasons_Name",
+                table: "Reasons",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserCompanies_UserId_CompanyId",
+                table: "UserCompanies",
+                columns: new[] { "UserId", "CompanyId" },
+                unique: true,
+                filter: "[UserId] IS NOT NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AdminCompanies");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -285,6 +364,12 @@ namespace Web.Migrations
 
             migrationBuilder.DropTable(
                 name: "Bills");
+
+            migrationBuilder.DropTable(
+                name: "Reasons");
+
+            migrationBuilder.DropTable(
+                name: "UserCompanies");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

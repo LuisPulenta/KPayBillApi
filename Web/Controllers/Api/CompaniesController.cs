@@ -8,13 +8,9 @@ using KPayBillApi.Web.Data.Entities;
 using System.Linq;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using System.IO;
 using KPayBillApi.Common.Helpers;
 using KPayBillApi.Web.Models.Request;
-using Org.BouncyCastle.Asn1.Ocsp;
 using KPayBillApi.Web.Helpers;
-using KPayBillApi.Web.Models;
-using System.Numerics;
 
 namespace KPayBillApi.Web.Controllers.Api
 {
@@ -80,6 +76,7 @@ namespace KPayBillApi.Web.Controllers.Api
 
           
             oldCompany!.Active = companyRequest.Active;
+            oldCompany!.Cuil = companyRequest.Cuil;
             oldCompany!.Name = companyRequest.Name;
             oldCompany!.Address= companyRequest.Address;
             oldCompany!.Phone= companyRequest.Phone;
@@ -120,6 +117,7 @@ namespace KPayBillApi.Web.Controllers.Api
             Company newCompany = new Company
             {
                 Id = 0,
+                Cuil = companyRequest.Cuil,
                 Name = companyRequest.Name,
                 Active = true,
                 Address = companyRequest.Address,

@@ -9,8 +9,24 @@ namespace KPayBillApi.Web.Data.Entities
         [Key]
         public int Id { get; set; }
 
-        public int IdCompany { get; set; }
+        [Display(Name = "Empresa Emisora")]
+        public int EmitterCompanyId { get; set; }
 
+        [Display(Name = "Empresa Emisora")]
+        public string EmitterCompanyName { get; set; }
+
+        [Display(Name = "Empresa Receptora")]
+        public int ReceiverCompanyId { get; set; }
+
+        [Display(Name = "Empresa Receptora")]
+        public string ReceiverCompanyName { get; set; }
+
+        [Display(Name = "Usuario")]
+        public string UserId { get; set; }
+
+        [Display(Name = "Usuario")]
+        public User User { get; set; }
+        
         public string Cuil { get; set; }
 
         [Display(Name = "Fecha Carga")]
@@ -71,5 +87,7 @@ namespace KPayBillApi.Web.Data.Entities
 
         [Display(Name = "Motivo")]
         public string Motivo { get; set; }
+
+        
     }
 }

@@ -129,6 +129,7 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
                 LastName = request.LastName,
                 PhoneNumber = request.PhoneNumber,
                 CompanyId = company.Id,
+                Company=company,
                 UserName = request.Email,
                 UserType = request.IdUserType == 0 ? UserType.AdminKP : request.IdUserType == 1 ? UserType.Admin : UserType.User,
                 Active = true,
@@ -185,6 +186,7 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
             user.LastName = request.LastName;
             user.PhoneNumber = request.PhoneNumber;
             user.Company = company;
+            user.CompanyId = company.Id;
             user.Active = request.Active;
             user.UserType = request.IdUserType == 0 ? UserType.AdminKP : request.IdUserType == 1 ? UserType.Admin : UserType.User;
 

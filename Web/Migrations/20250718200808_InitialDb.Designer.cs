@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250717213922_InitialDb")]
+    [Migration("20250718200808_InitialDb")]
     partial class InitialDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,28 @@ namespace Web.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("KPayBillApi.Web.Data.Entities.AdminCompany", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId", "CompanyId")
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
+
+                    b.ToTable("AdminCompanies");
+                });
 
             modelBuilder.Entity("KPayBillApi.Web.Data.Entities.Bill", b =>
                 {
@@ -44,10 +66,13 @@ namespace Web.Migrations
                     b.Property<string>("DocContable")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Estado")
+                    b.Property<int>("EmitterCompanyId")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdCompany")
+                    b.Property<string>("EmitterCompanyName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Estado")
                         .HasColumnType("int");
 
                     b.Property<decimal>("ImporteIVA")
@@ -76,6 +101,12 @@ namespace Web.Migrations
                     b.Property<int>("PV")
                         .HasColumnType("int");
 
+                    b.Property<int>("ReceiverCompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ReceiverCompanyName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("StrComprobante")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -86,7 +117,12 @@ namespace Web.Migrations
                         .HasMaxLength(3)
                         .HasColumnType("nvarchar(3)");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Bills");
                 });
@@ -218,6 +254,28 @@ namespace Web.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("KPayBillApi.Web.Data.Entities.UserCompany", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId", "CompanyId")
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
+
+                    b.ToTable("UserCompanies");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -347,6 +405,35 @@ namespace Web.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("Web.Data.Entities.Reason", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Reasons");
+                });
+
+            modelBuilder.Entity("KPayBillApi.Web.Data.Entities.Bill", b =>
+                {
+                    b.HasOne("KPayBillApi.Web.Data.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("KPayBillApi.Web.Data.Entities.User", b =>
