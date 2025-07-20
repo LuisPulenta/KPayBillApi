@@ -183,7 +183,7 @@ namespace KPayBillApi.Web.Controllers.Api
         {
             var assignedCompanyIds = await _context.AdminCompanies
         .Where(ac => ac.UserId == userId)
-        .Select(ac => ac.Id)
+        .Select(ac => ac.CompanyId)
         .ToListAsync();
 
             // Obtener solo las compañías activas asignadas, ordenadas por nombre
@@ -202,7 +202,7 @@ namespace KPayBillApi.Web.Controllers.Api
         {
             var assignedCompanyIds = await _context.AdminCompanies
         .Where(c => c.UserId == userId)
-        .Select(c => c.Id)
+        .Select(c => c.CompanyId)
         .ToListAsync();
 
             var companies = await _context.Companies
