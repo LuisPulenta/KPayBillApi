@@ -193,7 +193,7 @@ namespace KPayBillApi.Web.Data
                 _context.Companies.Add(new Company
                 {
                     Cuil = "20-17157001-7",
-                    Name = "Huiracan",
+                    Name = "Huracan",
                     Address = "Colon 107",
                     Phone = "3516000007",
                     Email = "huracan@yopmail.com",
