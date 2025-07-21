@@ -123,6 +123,7 @@ namespace KPayBillApi.Web.Controllers.Api
                 Active = true,
                 Address = companyRequest.Address,
                 Phone= companyRequest.Phone,
+                Email=companyRequest.Email
             };
 
             _context.Companies.Add(newCompany);
