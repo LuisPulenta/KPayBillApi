@@ -45,6 +45,7 @@ namespace Web.Migrations
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Active = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -320,6 +321,12 @@ namespace Web.Migrations
                 name: "IX_Companies_Cuil",
                 table: "Companies",
                 column: "Cuil",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Companies_Email",
+                table: "Companies",
+                column: "Email",
                 unique: true);
 
             migrationBuilder.CreateIndex(

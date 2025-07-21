@@ -80,6 +80,7 @@ namespace KPayBillApi.Web.Controllers.Api
             oldCompany!.Name = companyRequest.Name;
             oldCompany!.Address= companyRequest.Address;
             oldCompany!.Phone= companyRequest.Phone;
+            oldCompany!.Email = companyRequest.Email;
 
             _context.Update(oldCompany);
             try
@@ -261,6 +262,100 @@ namespace KPayBillApi.Web.Controllers.Api
             }
 
             _context.AdminCompanies.Remove(adminCompany);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        //-----------------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------------
+
+        //-----------------------------------------------------------------------------------
+        [HttpPost]
+        [Route("GetCompaniesAssigned2/{UserId}")]
+        public async Task<ActionResult> GetCompaniesAssigned2(string userId)
+        {
+            var assignedCompanyIds = await _context.UserCompanies
+        .Where(ac => ac.UserId == userId)
+        .Select(ac => ac.CompanyId)
+        .ToListAsync();
+
+            // Obtener solo las compañías activas asignadas, ordenadas por nombre
+            var assignedCompanies = await _context.Companies
+                .Where(c => c.Active && assignedCompanyIds.Contains(c.Id))
+                .OrderBy(c => c.Name)
+                .ToListAsync();
+
+            return Ok(assignedCompanies);
+        }
+
+        //-----------------------------------------------------------------------------------
+        [HttpPost]
+        [Route("GetCompaniesNotAssigned2/{UserId}")]
+        public async Task<ActionResult> GetCompaniesNotAssigned2(string userId)
+        {
+            var assignedCompanyIds = await _context.UserCompanies
+        .Where(c => c.UserId == userId)
+        .Select(c => c.CompanyId)
+        .ToListAsync();
+
+            var companies = await _context.Companies
+                .Where(c => c.Active && !assignedCompanyIds.Contains(c.Id))
+                .OrderBy(c => c.Name)
+                .ToListAsync();
+
+            return Ok(companies);
+        }
+
+        //-----------------------------------------------------------------------------------
+        [HttpPost]
+        [Route("AddUserCompany/{UserId}/{CompanyId}")]
+        public async Task<ActionResult> AddUserCompany(string userId, int companyId)
+        {
+            UserCompany newUserCompany = new UserCompany
+            {
+                Id = 0,
+                UserId = userId,
+                CompanyId = companyId,
+            };
+
+            _context.UserCompanies.Add(newUserCompany);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                return Ok(newUserCompany);
+            }
+            catch (DbUpdateException dbUpdateException)
+            {
+                if (dbUpdateException.InnerException.Message.Contains("duplicada"))
+                {
+                    return BadRequest("Ya existe esta Empresa en este Usuario.");
+                }
+                else
+                {
+                    return BadRequest(dbUpdateException.InnerException.Message);
+                }
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
+        //-----------------------------------------------------------------------------------
+        [HttpPost]
+        [Route("DeleteUserCompany/{UserId}/{CompanyId}")]
+        public async Task<ActionResult> DeleteUserCompany(string userId, int companyId)
+        {
+            UserCompany userCompany = await _context.UserCompanies.FirstOrDefaultAsync(t => t.UserId == userId && t.CompanyId == companyId);
+            if (userCompany == null)
+            {
+                return NotFound();
+            }
+
+            _context.UserCompanies.Remove(userCompany);
             await _context.SaveChangesAsync();
 
             return NoContent();

@@ -22,6 +22,7 @@ namespace KPayBillApi.Web.Data
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Company>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<Company>().HasIndex(x => x.Cuil).IsUnique();
+            modelBuilder.Entity<Company>().HasIndex(x => x.Email).IsUnique();
             modelBuilder.Entity<Reason>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<UserCompany>().HasIndex("UserId", "CompanyId").IsUnique();
             modelBuilder.Entity<AdminCompany>().HasIndex("UserId", "CompanyId").IsUnique();
