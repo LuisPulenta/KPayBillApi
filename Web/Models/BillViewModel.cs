@@ -15,7 +15,7 @@ namespace KPayBillApi.Web.Models
         public int ReceiverCompanyId { get; set; }
         public string ReceiverCompanyName { get; set; }
         public string UserId { get; set; }
-        public User User { get; set; }
+        public string UserName { get; set; }
         public string Cuil { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime BillDate { get; set; }
