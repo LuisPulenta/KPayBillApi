@@ -285,6 +285,41 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
             return Ok(list);
         }
 
+        //-------------------------------------------------------------------------------------------------
+        [HttpGet]
+        [Route("GetUsuarios")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<IEnumerable<User>>> GetUsuarios()
+        {
+            List<User> users = await _context.Users
+                .Include(x => x.Company)
+                .Where(x => x.UserType==UserType.User)
+                 .OrderBy(x => x.Company.Name + x.LastName + x.FirstName)
+                .ToListAsync();
+
+            List<UserViewModel> list = new List<UserViewModel>();
+            foreach (User user in users)
+            {
+                UserViewModel userViewModel = new UserViewModel
+                {
+                    Id = user.Id,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    UserTypeId = (int)user.UserType,
+                    UserTypeName = user.UserType.ToString(),
+                    Email = user.Email,
+                    EmailConfirm = user.EmailConfirmed,
+                    PhoneNumber = user.PhoneNumber,
+                    CompanyId = user.Company != null ? user.Company.Id : 1,
+                    CompanyName = user.Company != null ? user.Company.Name : "KeyPress",
+                    Active = user.Active,
+                };
+
+                list.Add(userViewModel);
+            }
+            return Ok(list);
+        }
+
 
         //-------------------------------------------------------------------------------------------------
         [HttpPost]
