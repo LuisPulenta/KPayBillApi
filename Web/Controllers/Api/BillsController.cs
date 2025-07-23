@@ -144,7 +144,7 @@ namespace KPayBillApi.Web.Controllers.Api
                 imageUrl = string.Empty;
                 var stream = new MemoryStream(billRequest.ImageArray);
                 var guid = Guid.NewGuid().ToString();
-                var file = $"{guid}.jpg";
+                var file = $"{guid}.pdf";
                 var folder = "wwwroot\\images\\Documents";
                 var fullPath = $"~/images/Documents/{file}";
                 var response = _filesHelper.UploadPhoto(stream, folder, file);
@@ -263,7 +263,7 @@ namespace KPayBillApi.Web.Controllers.Api
             {
                 var stream = new MemoryStream(billRequest.ImageArray);
                 var guid = Guid.NewGuid().ToString();
-                var file = $"{guid}.jpg";
+                var file = $"{guid}.pdf";
                 var folder = "wwwroot\\images\\Documents";
                 var fullPath = $"~/images/Documents/{file}";
                 var response = _filesHelper.UploadPhoto(stream, folder, file);
