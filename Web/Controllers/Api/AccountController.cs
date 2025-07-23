@@ -49,6 +49,7 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
             if (ModelState.IsValid)
             {
                 User user2 = await _userHelper.GetUserAsync(model.Username);
+                Company company = await _context.Companies.FirstOrDefaultAsync(o => o.Id == user2.CompanyId);
                 if (user2 != null)
                 {
                     var result = await _userHelper.ValidatePasswordAsync(user2, model.Password);
@@ -63,8 +64,8 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
                         Email = user2.Email,
                         EmailConfirm = user2.EmailConfirmed,
                         PhoneNumber = user2.PhoneNumber,
-                        CompanyId = user2.Company != null ? user2.Company.Id : 1,
-                        CompanyName = user2.Company != null ? user2.Company.Name : "KeyPress",
+                        CompanyId = company.Id,
+                        CompanyName = company.Name,
                         Active = user2.Active,
                     };
 
