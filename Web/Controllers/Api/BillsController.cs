@@ -198,7 +198,7 @@ namespace KPayBillApi.Web.Controllers.Api
             {
                 bills = await _context.Bills
                 .Include(x => x.User)
-                .Where(x => x.Estado != BillState.Enviado && x.CreateDate >= request.Desde && x.CreateDate <= request.Hasta.AddDays(1))
+                .Where(x => x.Estado != BillState.Enviado && x.BillDate >= request.Desde && x.BillDate <= request.Hasta.AddDays(1))
                 .OrderBy(x => x.Id)
                 .ToListAsync();
             }
@@ -206,7 +206,7 @@ namespace KPayBillApi.Web.Controllers.Api
             {
                 billsTemp = await _context.Bills
                .Include(x => x.User)
-                .Where(x => x.Estado != BillState.Enviado && x.CreateDate >= request.Desde && x.CreateDate <= request.Hasta.AddDays(1))
+                .Where(x => x.Estado != BillState.Enviado && x.BillDate >= request.Desde && x.BillDate <= request.Hasta.AddDays(1))
                 .OrderBy(x => x.Id)
                 .ToListAsync();
 
@@ -232,7 +232,7 @@ namespace KPayBillApi.Web.Controllers.Api
             {
                 bills = await _context.Bills
                 .Include(x => x.User)
-                .Where(x => x.UserId==request.UserId && x.Estado != BillState.Enviado && x.CreateDate >= request.Desde && x.CreateDate <= request.Hasta.AddDays(1))
+                .Where(x => x.UserId==request.UserId && x.Estado != BillState.Enviado && x.BillDate >= request.Desde && x.BillDate <= request.Hasta.AddDays(1))
                 .OrderBy(x => x.Id)
                 .ToListAsync();
             }
