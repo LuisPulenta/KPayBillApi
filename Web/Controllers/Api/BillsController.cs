@@ -201,6 +201,7 @@ namespace KPayBillApi.Web.Controllers.Api
                 .Where(x => x.Estado != BillState.Enviado && x.BillDate >= request.Desde && x.BillDate <= request.Hasta.AddDays(1))
                 .OrderBy(x => x.Id)
                 .ToListAsync();
+
             }
             if (request.UserType == 1)
             {
