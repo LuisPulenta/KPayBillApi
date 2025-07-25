@@ -332,7 +332,7 @@ namespace KPayBillApi.Web.Controllers.Api
             Bill oldBill = await _context.Bills.FirstOrDefaultAsync(o => o.Id == billRequest.Id);
 
             //Foto
-            string imageUrl = string.Empty;
+            string imageUrl = oldBill.Archivo;
             if (billRequest.ImageArray != null && billRequest.ImageArray.Length > 0)
             {
                 imageUrl = string.Empty;
