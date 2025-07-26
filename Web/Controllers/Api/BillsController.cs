@@ -14,6 +14,7 @@ using KPayBillApi.Web.Helpers;
 using KPayBillApi.Web.Models;
 using System.IO;
 using KPayBillApi.Common.Enums;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace KPayBillApi.Web.Controllers.Api
 {
@@ -96,6 +97,9 @@ namespace KPayBillApi.Web.Controllers.Api
         .Select(ac => ac.CompanyId)
         .ToListAsync();
 
+            User user = await _context.Users
+                .FirstOrDefaultAsync(p => p.Id == userId);
+
             List<BillViewModel> list = new List<BillViewModel>();
 
             foreach (Bill bill in bills)
@@ -103,8 +107,9 @@ namespace KPayBillApi.Web.Controllers.Api
 
                 foreach (int assignedCompanyId in assignedCompanyIds)
                 {
-                    if (assignedCompanyId == bill.ReceiverCompanyId)
-                    {
+                    
+                    if (assignedCompanyId == bill.EmitterCompanyId && user.CompanyId == bill.ReceiverCompanyId)
+                        {
                         BillViewModel billViewModel = new BillViewModel
                         {
                             Id = bill.Id,
@@ -150,6 +155,7 @@ namespace KPayBillApi.Web.Controllers.Api
               .ToListAsync();
 
             List<BillViewModel> list = new List<BillViewModel>();
+           
 
             foreach (Bill bill in bills)
             {
@@ -194,6 +200,9 @@ namespace KPayBillApi.Web.Controllers.Api
             List<Bill> billsTemp = new List<Bill>();
             List<BillViewModel> list = new List<BillViewModel>();
 
+            User user = await _context.Users
+                .FirstOrDefaultAsync(p => p.Id == request.UserId);
+
             if (request.UserType == 0)
             {
                 bills = await _context.Bills
@@ -220,7 +229,7 @@ namespace KPayBillApi.Web.Controllers.Api
 
                     foreach (int assignedCompanyId in assignedCompanyIds)
                     {
-                        if (assignedCompanyId == bill.ReceiverCompanyId)
+                        if (assignedCompanyId == bill.EmitterCompanyId && user.CompanyId==bill.ReceiverCompanyId)
                         {
                             bills.Add(bill);
                         }
