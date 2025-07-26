@@ -104,7 +104,6 @@ namespace KPayBillApi.Web.Controllers.Api
 
             foreach (Bill bill in bills)
             {
-
                 foreach (int assignedCompanyId in assignedCompanyIds)
                 {
                     
