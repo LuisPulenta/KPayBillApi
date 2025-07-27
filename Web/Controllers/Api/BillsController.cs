@@ -25,12 +25,14 @@ namespace KPayBillApi.Web.Controllers.Api
     {
         private readonly DataContext _context;
         private readonly IFilesHelper _filesHelper;
+        private readonly IMailHelper _mailHelper;
         private readonly IUserHelper _userHelper;
 
-        public BillsController(IUserHelper userHelper,DataContext context, IFilesHelper filesHelper )
+        public BillsController(IUserHelper userHelper,DataContext context, IFilesHelper filesHelper, IMailHelper mailHelper)
         {
             _context = context;
             _filesHelper = filesHelper;
+            _mailHelper = mailHelper;
             _userHelper = userHelper;
         }
 
@@ -522,6 +524,14 @@ namespace KPayBillApi.Web.Controllers.Api
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        //-------------------------------------------------------------------------------------------------
+        [HttpPost]
+        [Route("SendEmail")]
+        public void SendEmail(SendEmailRequest request)
+        {
+            _mailHelper.SendMail(request.to, request.cc, request.subject, request.body);
         }
     }
 }
