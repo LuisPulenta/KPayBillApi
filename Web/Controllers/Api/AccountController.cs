@@ -423,6 +423,34 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
             await _userHelper.DeleteUserAsync(user);
             return NoContent();
         }
+
+        //-------------------------------------------------------------------------------------------------
+        [HttpPost]
+        [Route("GetMailsAdmin/{CompanyId}")]
+        public async Task<IActionResult> GetMailsAdmin(int CompanyId)
+
+        {
+            List<User> users = await _context.Users
+                .Where(x => x.Company.Id == CompanyId && x.UserType == UserType.Admin && x.Active)
+                .ToListAsync();
+
+            string emailsAdmins = "";
+            foreach (User user in users)
+            {
+                emailsAdmins = emailsAdmins + user.Email + ",";
+            }
+
+            if (!string.IsNullOrEmpty(emailsAdmins))
+            {
+                emailsAdmins = emailsAdmins.Substring(0, emailsAdmins.Length - 1);
+            }
+
+            EmailsResponse emailsResponse = new EmailsResponse
+            {
+                Emails = emailsAdmins
+            };
+            return Ok(emailsResponse);
+        }
     }
         
 }
