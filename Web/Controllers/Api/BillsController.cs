@@ -337,6 +337,16 @@ namespace KPayBillApi.Web.Controllers.Api
                 return BadRequest(ModelState);
             }
 
+            BillState sta = BillState.Enviado;
+            if (billRequest.Estado == 1)
+            {
+                sta = BillState.Rechazado;
+            }
+            if (billRequest.Estado == 2)
+            {
+                sta = BillState.Pagado;
+            }
+
             Bill oldBill = await _context.Bills.FirstOrDefaultAsync(o => o.Id == billRequest.Id);
 
             //Foto
@@ -377,7 +387,7 @@ namespace KPayBillApi.Web.Controllers.Api
             oldBill!.ImporteTotal = billRequest.ImporteTotal;
             oldBill!.OC = billRequest.OC;
             oldBill!.DocContable = billRequest.DocContable;
-            oldBill!.Estado = Common.Enums.BillState.Enviado;
+            oldBill!.Estado = sta;
             oldBill!.Motivo = billRequest.Motivo;
             oldBill!.Archivo = imageUrl;
 
