@@ -420,6 +420,7 @@ namespace KPayBillApi.Web.Controllers.Api
 
         //-----------------------------------------------------------------------------------
         [HttpPost]
+        [Route("PostBill")]
         public async Task<ActionResult<Bill>> PostBill(BillRequest billRequest)
         {
             if (!ModelState.IsValid)
@@ -492,34 +493,7 @@ namespace KPayBillApi.Web.Controllers.Api
             try
             {
                 await _context.SaveChangesAsync();
-                return Ok(
-                    new BillViewModel
-                    {
-                        Id = newBill.Id,
-                        EmitterCompanyId = newBill.EmitterCompanyId,
-                        EmitterCompanyName = newBill.EmitterCompanyName,
-                        ReceiverCompanyId = newBill.ReceiverCompanyId,
-                        ReceiverCompanyName = newBill.ReceiverCompanyName,
-                        UserId = newBill.UserId,
-                        UserName = newBill.User.FullName,
-                        Cuil = newBill.Cuil,
-                        CreateDate = newBill.CreateDate,
-                        BillDate = newBill.BillDate,
-                        Tipo = newBill.Tipo,
-                        Letra = newBill.Letra,
-                        PV = newBill.PV,
-                        Numero = newBill.Numero,
-                        StrComprobante = newBill.StrComprobante,
-                        ImporteNeto = newBill.ImporteNeto,
-                        ImporteIVA = newBill.ImporteIVA,
-                        ImporteTotal = newBill.ImporteTotal,
-                        Archivo = newBill.Archivo,
-                        OC = newBill.OC,
-                        DocContable = newBill.DocContable,
-                        Estado = newBill.Estado,
-                        Motivo = newBill.Motivo,
-                    }
-                );
+                return Ok(newBill);
             }
             catch (DbUpdateException dbUpdateException)
             {
