@@ -426,7 +426,7 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
 
         //-------------------------------------------------------------------------------------------------
         [HttpPost]
-        [Route("        /{CompanyId}")]
+        [Route("GetMailsAdmin/{CompanyId}")]
         public async Task<IActionResult> GetMailsAdmin(int CompanyId)
 
         {
