@@ -76,6 +76,7 @@ namespace KPayBillApi.Web.Controllers.Api
                     DocContable = bill.DocContable,
                     Estado = bill.Estado,
                     Motivo = bill.Motivo,
+                    NroDocRel=bill.NroDocRel,
                 };
 
                 list.Add(billViewModel);
@@ -136,6 +137,7 @@ namespace KPayBillApi.Web.Controllers.Api
                             DocContable = bill.DocContable,
                             Estado = bill.Estado,
                             Motivo = bill.Motivo,
+                            NroDocRel = bill.NroDocRel,
                         };
                         list.Add(billViewModel);
                     }
@@ -185,6 +187,7 @@ namespace KPayBillApi.Web.Controllers.Api
                     DocContable = bill.DocContable,
                     Estado = bill.Estado,
                     Motivo = bill.Motivo,
+                    NroDocRel = bill.NroDocRel,
                 };
 
                 list.Add(billViewModel);
@@ -275,6 +278,7 @@ namespace KPayBillApi.Web.Controllers.Api
                     DocContable = bill.DocContable,
                     Estado = bill.Estado,
                     Motivo = bill.Motivo,
+                    NroDocRel = bill.NroDocRel,
                 };
                 list.Add(billViewModel);
                
@@ -322,6 +326,7 @@ namespace KPayBillApi.Web.Controllers.Api
                 DocContable = bill.DocContable,
                 Estado = bill.Estado,
                 Motivo = bill.Motivo,
+                NroDocRel = bill.NroDocRel,
             };
         }
 
@@ -391,6 +396,7 @@ namespace KPayBillApi.Web.Controllers.Api
             oldBill!.DocContable = billRequest.DocContable;
             oldBill!.Estado = sta;
             oldBill!.Motivo = billRequest.Motivo;
+            oldBill!.NroDocRel = billRequest.NroDocRel;
             oldBill!.Archivo = imageUrl;
 
 
@@ -467,6 +473,7 @@ namespace KPayBillApi.Web.Controllers.Api
                 DocContable = billRequest.DocContable,
                 Estado = state,
                 Motivo = billRequest.Motivo,
+                NroDocRel = billRequest.NroDocRel,
                 Archivo ="",
             };
 

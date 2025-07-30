@@ -88,6 +88,9 @@ namespace KPayBillApi.Web.Data.Entities
         [Display(Name = "Motivo")]
         public string Motivo { get; set; }
 
-        
+        [Display(Name = "N° Doc. Relac.")]
+        [MaxLength(13, ErrorMessage = "El campo {0} no puede tener más de {1} caracteres")]
+        public string NroDocRel { get; set; }
+
     }
 }

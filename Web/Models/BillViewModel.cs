@@ -32,6 +32,7 @@ namespace KPayBillApi.Web.Models
         public string DocContable { get; set; }
         public BillState Estado { get; set; }
         public string Motivo { get; set; }
+        public string NroDocRel { get; set; }
         public string ArchivoFullPath => string.IsNullOrEmpty(Archivo)
         ? $"https://keypress.serveftp.net/KPayBillApi/images/documents/noimage.png"
         : $"https://keypress.serveftp.net/KPayBillApi{Archivo.Substring(1)}";       

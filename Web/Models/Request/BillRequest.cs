@@ -24,6 +24,7 @@ namespace KPayBillApi.Web.Models.Request
         public string DocContable { get; set; }
         public int Estado { get; set; }
         public string Motivo { get; set; }
+        public string NroDocRel { get; set; }
         public byte[] ImageArray { get; set; }
     }
 }
