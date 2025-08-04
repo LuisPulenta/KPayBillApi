@@ -43,7 +43,7 @@ namespace KPayBillApi.Web.Controllers.Api
         {
             List<Bill> bills = await _context.Bills
                 .Include(x => x.User)
-                .Where(x => x.User.Id== userId && x.Estado==BillState.Enviado)
+                .Where(x => x.User.Id== userId && (x.Estado==BillState.Enviado || x.Estado == BillState.Rechazado))
               .OrderBy(x => x.Id)
               .ToListAsync();
 
@@ -211,7 +211,7 @@ namespace KPayBillApi.Web.Controllers.Api
             {
                 bills = await _context.Bills
                 .Include(x => x.User)
-                .Where(x => x.Estado != BillState.Enviado && x.BillDate >= request.Desde && x.BillDate <= request.Hasta.AddDays(1))
+                .Where(x => x.Estado == BillState.Recepcionado && x.BillDate >= request.Desde && x.BillDate <= request.Hasta.AddDays(1))
                 .OrderBy(x => x.Id)
                 .ToListAsync();
             }
@@ -219,7 +219,7 @@ namespace KPayBillApi.Web.Controllers.Api
             {
                 billsTemp = await _context.Bills
                .Include(x => x.User)
-                .Where(x => x.Estado != BillState.Enviado && x.BillDate >= request.Desde && x.BillDate <= request.Hasta.AddDays(1))
+                .Where(x => x.Estado == BillState.Recepcionado && x.BillDate >= request.Desde && x.BillDate <= request.Hasta.AddDays(1))
                 .OrderBy(x => x.Id)
                 .ToListAsync();
 
@@ -245,7 +245,7 @@ namespace KPayBillApi.Web.Controllers.Api
             {
                 bills = await _context.Bills
                 .Include(x => x.User)
-                .Where(x => x.UserId==request.UserId && x.Estado != BillState.Enviado && x.BillDate >= request.Desde && x.BillDate <= request.Hasta.AddDays(1))
+                .Where(x => x.UserId==request.UserId && x.Estado == BillState.Recepcionado && x.BillDate >= request.Desde && x.BillDate <= request.Hasta.AddDays(1))
                 .OrderBy(x => x.Id)
                 .ToListAsync();
             }
@@ -351,7 +351,7 @@ namespace KPayBillApi.Web.Controllers.Api
             }
             if (billRequest.Estado == 2)
             {
-                sta = BillState.Pagado;
+                sta = BillState.Recepcionado;
             }
 
             Bill oldBill = await _context.Bills.FirstOrDefaultAsync(o => o.Id == billRequest.Id);
@@ -446,7 +446,7 @@ namespace KPayBillApi.Web.Controllers.Api
 
             if (billRequest.Estado == 2)
             {
-                state = BillState.Pagado;
+                state = BillState.Recepcionado;
             }
 
             Bill newBill = new Bill

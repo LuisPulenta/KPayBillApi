@@ -4,6 +4,6 @@
     {
         Enviado,
         Rechazado,
-        Pagado
+        Recepcionado
     }
 }
