@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using KPayBillApi.Web.Data.Entities;
 using Web.Data.Entities;
+using Mono.TextTemplating;
 
 namespace KPayBillApi.Web.Data
 {
@@ -26,6 +27,13 @@ namespace KPayBillApi.Web.Data
             modelBuilder.Entity<Reason>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<UserCompany>().HasIndex("UserId", "CompanyId").IsUnique();
             modelBuilder.Entity<AdminCompany>().HasIndex("UserId", "CompanyId").IsUnique();
+            
+            modelBuilder.Entity<Bill>()
+    .HasIndex(b => new { b.EmitterCompanyId, b.Letra, b.PV, b.Numero })
+    .IsUnique();
+            modelBuilder.Entity<Bill>().Property(b => b.ImporteNeto).HasColumnType("decimal(18,2)");
+            modelBuilder.Entity<Bill>().Property(b => b.ImporteIVA).HasColumnType("decimal(18,2)");
+            modelBuilder.Entity<Bill>().Property(b => b.ImporteTotal).HasColumnType("decimal(18,2)");
         }
     }
 }
