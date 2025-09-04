@@ -38,6 +38,7 @@ namespace KPayBillApi.Web.Data
         {
             await _userHelper.CheckRoleAsync(UserType.AdminKP.ToString());
             await _userHelper.CheckRoleAsync(UserType.Admin.ToString());
+            await _userHelper.CheckRoleAsync(UserType.Contable.ToString());
             await _userHelper.CheckRoleAsync(UserType.User.ToString());
         }
 

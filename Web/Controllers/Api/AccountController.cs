@@ -137,7 +137,7 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
                     ? UserType.Admin
                     : request.IdUserType == 2
                         ? UserType.Contable
-                        : UserType.User
+                        : UserType.User,
                 Active = true,
             };
 
