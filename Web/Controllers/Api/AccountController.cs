@@ -288,13 +288,13 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
 
         //-------------------------------------------------------------------------------------------------
         [HttpGet]
-        [Route("GetPagadores")]
+        [Route("GetPagadores/{companyId}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsuarios()
+        public async Task<ActionResult<IEnumerable<User>>> GetPagadores(int companyId)
         {
             List<User> users = await _context.Users
                 .Include(x => x.Company)
-                .Where(x => x.UserType == UserType.Contable)
+                .Where(x => x.UserType == UserType.Contable && x.CompanyId == companyId)
                  .OrderBy(x => x.Company.Name + x.LastName + x.FirstName)
                 .ToListAsync();
 
