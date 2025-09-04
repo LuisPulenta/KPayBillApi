@@ -32,9 +32,11 @@ namespace KPayBillApi.Web.Controllers.Api
 
         //-----------------------------------------------------------------------------------
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Supplier>>> GetSuppliers()
+        [Route("GetSuppliers/{companyId}")]
+        public async Task<ActionResult<IEnumerable<Supplier>>> GetSuppliers(int companyId)
         {
             List<Supplier> suppliers = await _context.Suppliers
+               .Where(x => x.CompanyId == companyId)
               .OrderBy(x => x.Name)
               .ToListAsync();
 
