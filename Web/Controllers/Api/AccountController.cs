@@ -31,7 +31,6 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
         private readonly IMailHelper _mailHelper;
         private readonly IImageHelper _imageHelper;
 
-
         public AccountController(IUserHelper userHelper, IConfiguration configuration, DataContext context, IMailHelper mailHelper, IImageHelper imageHelper)
         {
             _userHelper = userHelper;
@@ -130,7 +129,7 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
                 LastName = request.LastName,
                 PhoneNumber = request.PhoneNumber,
                 CompanyId = company.Id,
-                Company=company,
+                Company = company,
                 UserName = request.Email,
                 UserType = request.IdUserType == 0 ? UserType.AdminKP : request.IdUserType == 1 ? UserType.Admin : UserType.User,
                 Active = true,
@@ -260,6 +259,7 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
         {
             List<User> users = await _context.Users
                 .Include(x => x.Company)
+                 .Where(x => x.UserType == UserType.AdminKP || x.UserType == UserType.Admin)
                  .OrderBy(x => x.Company.Name + x.LastName + x.FirstName)
                 .ToListAsync();
 
@@ -288,13 +288,13 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
 
         //-------------------------------------------------------------------------------------------------
         [HttpGet]
-        [Route("GetUsuarios")]
+        [Route("GetPagadores")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<IEnumerable<User>>> GetUsuarios()
         {
             List<User> users = await _context.Users
                 .Include(x => x.Company)
-                .Where(x => x.UserType==UserType.User)
+                .Where(x => x.UserType == UserType.Contable)
                  .OrderBy(x => x.Company.Name + x.LastName + x.FirstName)
                 .ToListAsync();
 
@@ -320,7 +320,6 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
             }
             return Ok(list);
         }
-
 
         //-------------------------------------------------------------------------------------------------
         [HttpPost]
@@ -409,7 +408,6 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
             return Ok(user);
         }
 
-
         //-------------------------------------------------------------------------------------------------
         [HttpDelete]
         [Route("DeleteUserById/{Id}")]
@@ -452,5 +450,4 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
             return Ok(emailsResponse);
         }
     }
-        
 }
