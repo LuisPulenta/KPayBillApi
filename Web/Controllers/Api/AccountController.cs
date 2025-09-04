@@ -131,7 +131,13 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
                 CompanyId = company.Id,
                 Company = company,
                 UserName = request.Email,
-                UserType = request.IdUserType == 0 ? UserType.AdminKP : request.IdUserType == 1 ? UserType.Admin : UserType.User,
+                UserType = request.IdUserType == 0
+                ? UserType.AdminKP
+                : request.IdUserType == 1
+                    ? UserType.Admin
+                    : request.IdUserType == 2
+                        ? UserType.Contable
+                        : UserType.User
                 Active = true,
             };
 
@@ -188,7 +194,14 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
             user.Company = company;
             user.CompanyId = company.Id;
             user.Active = request.Active;
-            user.UserType = request.IdUserType == 0 ? UserType.AdminKP : request.IdUserType == 1 ? UserType.Admin : UserType.User;
+            user.UserType =
+                request.IdUserType == 0
+                ? UserType.AdminKP
+                : request.IdUserType == 1
+                    ? UserType.Admin
+                        : request.IdUserType == 2
+                            ? UserType.Contable
+                            : UserType.User;
 
             await _userHelper.UpdateUserAsync(user);
             return NoContent();
