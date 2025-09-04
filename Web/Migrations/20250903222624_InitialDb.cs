@@ -1,26 +1,16 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
+#nullable disable
+
 namespace Web.Migrations
 {
+    /// <inheritdoc />
     public partial class InitialDb : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "AdminCompanies",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CompanyId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AdminCompanies", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -67,13 +57,34 @@ namespace Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Suppliers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Cuil = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Active = table.Column<bool>(type: "bit", nullable: false),
+                    CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CompanyId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Suppliers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserCompanies",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CompanyId = table.Column<int>(type: "int", nullable: false)
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
+                    CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -133,8 +144,7 @@ namespace Web.Migrations
                         name: "FK_AspNetUsers_Companies_CompanyId",
                         column: x => x.CompanyId,
                         principalTable: "Companies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -248,7 +258,8 @@ namespace Web.Migrations
                     OC = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DocContable = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Estado = table.Column<int>(type: "int", nullable: false),
-                    Motivo = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Motivo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NroDocRel = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -257,16 +268,8 @@ namespace Web.Migrations
                         name: "FK_Bills_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AdminCompanies_UserId_CompanyId",
-                table: "AdminCompanies",
-                columns: new[] { "UserId", "CompanyId" },
-                unique: true,
-                filter: "[UserId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -313,6 +316,12 @@ namespace Web.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Bills_EmitterCompanyId_Letra_PV_Numero",
+                table: "Bills",
+                columns: new[] { "EmitterCompanyId", "Letra", "PV", "Numero" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Bills_UserId",
                 table: "Bills",
                 column: "UserId");
@@ -342,6 +351,13 @@ namespace Web.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Suppliers_Cuil_CompanyId",
+                table: "Suppliers",
+                columns: new[] { "Cuil", "CompanyId" },
+                unique: true,
+                filter: "[CompanyId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserCompanies_UserId_CompanyId",
                 table: "UserCompanies",
                 columns: new[] { "UserId", "CompanyId" },
@@ -349,11 +365,9 @@ namespace Web.Migrations
                 filter: "[UserId] IS NOT NULL");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "AdminCompanies");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -374,6 +388,9 @@ namespace Web.Migrations
 
             migrationBuilder.DropTable(
                 name: "Reasons");
+
+            migrationBuilder.DropTable(
+                name: "Suppliers");
 
             migrationBuilder.DropTable(
                 name: "UserCompanies");

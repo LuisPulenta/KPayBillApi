@@ -4,6 +4,7 @@
     {
         AdminKP,
         Admin,
+        Contable,
         User
     }
 }

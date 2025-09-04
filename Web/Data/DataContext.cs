@@ -11,12 +11,12 @@ namespace KPayBillApi.Web.Data
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
         }
-        
+
         public DbSet<Company> Companies { get; set; }
+        public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Bill> Bills { get; set; }
         public DbSet<Reason> Reasons { get; set; }
         public DbSet<UserCompany> UserCompanies { get; set; }
-        public DbSet<AdminCompany> AdminCompanies { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -24,10 +24,10 @@ namespace KPayBillApi.Web.Data
             modelBuilder.Entity<Company>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<Company>().HasIndex(x => x.Cuil).IsUnique();
             modelBuilder.Entity<Company>().HasIndex(x => x.Email).IsUnique();
+            modelBuilder.Entity<Supplier>().HasIndex("Cuil", "CompanyId").IsUnique();
             modelBuilder.Entity<Reason>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<UserCompany>().HasIndex("UserId", "CompanyId").IsUnique();
-            modelBuilder.Entity<AdminCompany>().HasIndex("UserId", "CompanyId").IsUnique();
-            
+
             modelBuilder.Entity<Bill>()
     .HasIndex(b => new { b.EmitterCompanyId, b.Letra, b.PV, b.Numero })
     .IsUnique();

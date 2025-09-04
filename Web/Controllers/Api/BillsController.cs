@@ -28,7 +28,7 @@ namespace KPayBillApi.Web.Controllers.Api
         private readonly IMailHelper _mailHelper;
         private readonly IUserHelper _userHelper;
 
-        public BillsController(IUserHelper userHelper,DataContext context, IFilesHelper filesHelper, IMailHelper mailHelper)
+        public BillsController(IUserHelper userHelper, DataContext context, IFilesHelper filesHelper, IMailHelper mailHelper)
         {
             _context = context;
             _filesHelper = filesHelper;
@@ -43,7 +43,7 @@ namespace KPayBillApi.Web.Controllers.Api
         {
             List<Bill> bills = await _context.Bills
                 .Include(x => x.User)
-                .Where(x => x.User.Id== userId && (x.Estado==BillState.Enviado || x.Estado == BillState.Rechazado))
+                .Where(x => x.User.Id == userId && (x.Estado == BillState.Enviado || x.Estado == BillState.Rechazado))
               .OrderBy(x => x.Id)
               .ToListAsync();
 
@@ -76,7 +76,7 @@ namespace KPayBillApi.Web.Controllers.Api
                     DocContable = bill.DocContable,
                     Estado = bill.Estado,
                     Motivo = bill.Motivo,
-                    NroDocRel=bill.NroDocRel,
+                    NroDocRel = bill.NroDocRel,
                 };
 
                 list.Add(billViewModel);
@@ -95,11 +95,6 @@ namespace KPayBillApi.Web.Controllers.Api
               .OrderBy(x => x.Id)
               .ToListAsync();
 
-            var assignedCompanyIds = await _context.AdminCompanies
-        .Where(ac => ac.UserId == userId)
-        .Select(ac => ac.CompanyId)
-        .ToListAsync();
-
             User user = await _context.Users
                 .FirstOrDefaultAsync(p => p.Id == userId);
 
@@ -107,41 +102,34 @@ namespace KPayBillApi.Web.Controllers.Api
 
             foreach (Bill bill in bills)
             {
-                foreach (int assignedCompanyId in assignedCompanyIds)
+                BillViewModel billViewModel = new BillViewModel
                 {
-                    
-                    if (assignedCompanyId == bill.EmitterCompanyId && user.CompanyId == bill.ReceiverCompanyId)
-                        {
-                        BillViewModel billViewModel = new BillViewModel
-                        {
-                            Id = bill.Id,
-                            EmitterCompanyId = bill.EmitterCompanyId,
-                            EmitterCompanyName = bill.EmitterCompanyName,
-                            ReceiverCompanyId = bill.ReceiverCompanyId,
-                            ReceiverCompanyName = bill.ReceiverCompanyName,
-                            UserId = bill.UserId,
-                            UserName = bill.User.FullName,
-                            Cuil = bill.Cuil,
-                            CreateDate = bill.CreateDate,
-                            BillDate = bill.BillDate,
-                            Tipo = bill.Tipo,
-                            Letra = bill.Letra,
-                            PV = bill.PV,
-                            Numero = bill.Numero,
-                            StrComprobante = bill.StrComprobante,
-                            ImporteNeto = bill.ImporteNeto,
-                            ImporteIVA = bill.ImporteIVA,
-                            ImporteTotal = bill.ImporteTotal,
-                            Archivo = bill.Archivo,
-                            OC = bill.OC,
-                            DocContable = bill.DocContable,
-                            Estado = bill.Estado,
-                            Motivo = bill.Motivo,
-                            NroDocRel = bill.NroDocRel,
-                        };
-                        list.Add(billViewModel);
-                    }
-                }
+                    Id = bill.Id,
+                    EmitterCompanyId = bill.EmitterCompanyId,
+                    EmitterCompanyName = bill.EmitterCompanyName,
+                    ReceiverCompanyId = bill.ReceiverCompanyId,
+                    ReceiverCompanyName = bill.ReceiverCompanyName,
+                    UserId = bill.UserId,
+                    UserName = bill.User.FullName,
+                    Cuil = bill.Cuil,
+                    CreateDate = bill.CreateDate,
+                    BillDate = bill.BillDate,
+                    Tipo = bill.Tipo,
+                    Letra = bill.Letra,
+                    PV = bill.PV,
+                    Numero = bill.Numero,
+                    StrComprobante = bill.StrComprobante,
+                    ImporteNeto = bill.ImporteNeto,
+                    ImporteIVA = bill.ImporteIVA,
+                    ImporteTotal = bill.ImporteTotal,
+                    Archivo = bill.Archivo,
+                    OC = bill.OC,
+                    DocContable = bill.DocContable,
+                    Estado = bill.Estado,
+                    Motivo = bill.Motivo,
+                    NroDocRel = bill.NroDocRel,
+                };
+                list.Add(billViewModel);
             }
             return Ok(list);
         }
@@ -158,7 +146,6 @@ namespace KPayBillApi.Web.Controllers.Api
               .ToListAsync();
 
             List<BillViewModel> list = new List<BillViewModel>();
-           
 
             foreach (Bill bill in bills)
             {
@@ -222,34 +209,15 @@ namespace KPayBillApi.Web.Controllers.Api
                 .Where(x => x.Estado == BillState.Recepcionado && x.BillDate >= request.Desde && x.BillDate <= request.Hasta.AddDays(1))
                 .OrderBy(x => x.Id)
                 .ToListAsync();
-
-                var assignedCompanyIds = await _context.AdminCompanies
-            .Where(ac => ac.UserId == request.UserId)
-            .Select(ac => ac.CompanyId)
-            .ToListAsync();
-
-                foreach (Bill bill in billsTemp)
-                {
-
-                    foreach (int assignedCompanyId in assignedCompanyIds)
-                    {
-                        if (assignedCompanyId == bill.EmitterCompanyId && user.CompanyId==bill.ReceiverCompanyId)
-                        {
-                            bills.Add(bill);
-                        }
-                    }
-                }
-
             }
             if (request.UserType == 2)
             {
                 bills = await _context.Bills
                 .Include(x => x.User)
-                .Where(x => x.UserId==request.UserId && x.Estado == BillState.Recepcionado && x.BillDate >= request.Desde && x.BillDate <= request.Hasta.AddDays(1))
+                .Where(x => x.UserId == request.UserId && x.Estado == BillState.Recepcionado && x.BillDate >= request.Desde && x.BillDate <= request.Hasta.AddDays(1))
                 .OrderBy(x => x.Id)
                 .ToListAsync();
             }
-
 
             foreach (Bill bill in bills)
             {
@@ -281,7 +249,6 @@ namespace KPayBillApi.Web.Controllers.Api
                     NroDocRel = bill.NroDocRel,
                 };
                 list.Add(billViewModel);
-               
             }
             return Ok(list);
         }
@@ -290,11 +257,9 @@ namespace KPayBillApi.Web.Controllers.Api
         [HttpGet("{id}")]
         public async Task<ActionResult<BillViewModel>> GetBill(int id)
         {
-
             Bill bill = await _context.Bills
                 .Include(u => u.User)
                 .FirstOrDefaultAsync(p => p.Id == id);
-
 
             if (bill == null)
             {
@@ -370,7 +335,7 @@ namespace KPayBillApi.Web.Controllers.Api
 
                 if (response)
                 {
-                    imageUrl = fullPath;                    
+                    imageUrl = fullPath;
                 }
             }
 
@@ -398,7 +363,6 @@ namespace KPayBillApi.Web.Controllers.Api
             oldBill!.Motivo = billRequest.Motivo;
             oldBill!.NroDocRel = billRequest.NroDocRel;
             oldBill!.Archivo = imageUrl;
-
 
             _context.Update(oldBill);
             try
@@ -474,12 +438,10 @@ namespace KPayBillApi.Web.Controllers.Api
                 Estado = state,
                 Motivo = billRequest.Motivo,
                 NroDocRel = billRequest.NroDocRel,
-                Archivo ="",
+                Archivo = "",
             };
 
-
             //Foto
-
 
             if (billRequest.ImageArray != null)
             {
@@ -518,6 +480,7 @@ namespace KPayBillApi.Web.Controllers.Api
                 return BadRequest(exception.Message);
             }
         }
+
         //-----------------------------------------------------------------------------------
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCompany(int id)

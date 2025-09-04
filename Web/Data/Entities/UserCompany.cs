@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace KPayBillApi.Web.Data.Entities
 {
@@ -12,11 +11,6 @@ namespace KPayBillApi.Web.Data.Entities
 
         public int CompanyId { get; set; }
 
-        public static implicit operator UserCompany(AdminCompany v)
-        {
-            throw new NotImplementedException();
-        }
+        public string CompanyName { get; set; }
     }
 }
-
-
