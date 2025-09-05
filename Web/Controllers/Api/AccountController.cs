@@ -332,6 +332,7 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
 
                 list.Add(userViewModel);
             }
+
             return Ok(list);
         }
 
