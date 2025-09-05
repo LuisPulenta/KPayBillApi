@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using KPayBillApi.Common.Helpers;
 using KPayBillApi.Web.Models.Request;
 using KPayBillApi.Web.Helpers;
+using KPayBillApi.Web.Models;
 
 namespace KPayBillApi.Web.Controllers.Api
 {
