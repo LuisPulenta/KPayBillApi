@@ -36,9 +36,15 @@ namespace KPayBillApi.Web.Data.Entities
         public bool Active { get; set; }
 
         [Display(Name = "Empresa")]
-        public string? CompanyName { get; set; }
+        public string? ForCompanyName { get; set; }
 
         [Display(Name = "Empresa")]
-        public int? CompanyId { get; set; }
+        public int? ForCompanyId { get; set; }
+
+        [Display(Name = "Empresa")]
+        public string? FromCompanyName { get; set; }
+
+        [Display(Name = "Empresa")]
+        public int? FromCompanyId { get; set; }
     }
 }

@@ -37,7 +37,7 @@ namespace KPayBillApi.Web.Controllers.Api
         public async Task<ActionResult<IEnumerable<Supplier>>> GetSuppliers(int companyId)
         {
             List<Supplier> suppliers = await _context.Suppliers
-               .Where(x => x.CompanyId == companyId)
+               .Where(x => x.ForCompanyId == companyId)
               .OrderBy(x => x.Name)
               .ToListAsync();
 
@@ -124,8 +124,10 @@ namespace KPayBillApi.Web.Controllers.Api
                 Address = supplierRequest.Address,
                 Phone = supplierRequest.Phone,
                 Email = supplierRequest.Email,
-                CompanyId = supplierRequest.CompanyId,
-                CompanyName = supplierRequest.CompanyName,
+                FromCompanyId = supplierRequest.FromCompanyId,
+                FromCompanyName = supplierRequest.FromCompanyName,
+                ForCompanyId = supplierRequest.ForCompanyId,
+                ForCompanyName = supplierRequest.ForCompanyName,
             };
 
             _context.Suppliers.Add(newSupplier);
