@@ -58,6 +58,22 @@ namespace KPayBillApi.Web.Controllers.Api
         }
 
         //-----------------------------------------------------------------------------------
+        [HttpGet]
+        [Route("GetSupplierByCuil/{cuil}")]
+        public async Task<ActionResult<Company>> GetCompanyByCuil(string cuil)
+        {
+            Company company = await _context.Companies
+                .FirstOrDefaultAsync(p => p.Cuil == cuil && p.Type == "Proveedor");
+
+            if (company == null)
+            {
+                return NotFound();
+            }
+
+            return company;
+        }
+
+        //-----------------------------------------------------------------------------------
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCompany(int id, CompanyRequest companyRequest)
         {
