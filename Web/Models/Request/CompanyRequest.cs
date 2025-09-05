@@ -1,5 +1,4 @@
-﻿
-namespace KPayBillApi.Web.Models.Request
+﻿namespace KPayBillApi.Web.Models.Request
 {
     public class CompanyRequest
     {
@@ -10,5 +9,6 @@ namespace KPayBillApi.Web.Models.Request
         public string Phone { get; set; }
         public string Email { get; set; }
         public bool Active { get; set; }
+        public string Type { get; set; }
     }
 }

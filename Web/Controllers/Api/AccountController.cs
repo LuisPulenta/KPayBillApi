@@ -338,38 +338,48 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
 
         //-------------------------------------------------------------------------------------------------
         [HttpGet]
-        [Route("GetUsersSupplier/{id}")]
+        [Route("GetUsersSupplier/{supplierId}/{companyId}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsersSupplier(int id)
+        public async Task<ActionResult<IEnumerable<User>>> GetUsersSupplier(int supplierId, int companyId)
         {
+            List<User> users = await _context.Users
+               .Include(x => x.Company)
+               .Where(x => x.UserType == UserType.User && x.CompanyId == supplierId)
+                .OrderBy(x => x.Company.Name + x.LastName + x.FirstName)
+               .ToListAsync();
+
             List<UserCompany> usersCompany = await _context.UserCompanies
-                .Where(x => x.CompanyId == id)
+                .Where(x => x.CompanyId == companyId)
                 .ToListAsync();
 
-            List<UserViewModel> users = [];
+            List<UserViewModel> users2 = [];
 
-            foreach (UserCompany userCompany in usersCompany)
+            foreach (User user2 in users)
             {
-                User user = await _userHelper.GetUserAsync(new Guid(userCompany.UserId));
-
-                UserViewModel userViewModel = new UserViewModel
+                foreach (UserCompany userCompany in usersCompany)
                 {
-                    Id = user.Id,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    UserTypeId = (int)user.UserType,
-                    UserTypeName = user.UserType.ToString(),
-                    Email = user.Email,
-                    EmailConfirm = user.EmailConfirmed,
-                    PhoneNumber = user.PhoneNumber,
-                    CompanyId = user.Company.Id,
-                    CompanyName = user.Company.Name,
-                    Active = user.Active,
-                };
+                    if (user2.Id == userCompany.UserId)
+                    {
+                        UserViewModel userViewModel = new UserViewModel
+                        {
+                            Id = user2.Id,
+                            FirstName = user2.FirstName,
+                            LastName = user2.LastName,
+                            UserTypeId = (int)user2.UserType,
+                            UserTypeName = user2.UserType.ToString(),
+                            Email = user2.Email,
+                            EmailConfirm = user2.EmailConfirmed,
+                            PhoneNumber = user2.PhoneNumber,
+                            CompanyId = user2.Company.Id,
+                            CompanyName = user2.Company.Name,
+                            Active = user2.Active,
+                        };
 
-                users.Add(userViewModel);
+                        users2.Add(userViewModel);
+                    }
+                }
             }
-            return Ok(users);
+            return Ok(users2);
         }
 
         //-------------------------------------------------------------------------------------------------

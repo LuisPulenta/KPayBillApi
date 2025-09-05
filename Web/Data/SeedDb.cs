@@ -86,6 +86,7 @@ namespace KPayBillApi.Web.Data
                     Phone = "351 11223344",
                     Email = "keypress@yopmail.com",
                     Active = true,
+                    Type = "Empresa",
                 });
 
                 _context.Companies.Add(new Company
@@ -96,6 +97,7 @@ namespace KPayBillApi.Web.Data
                     Phone = "011-11111111",
                     Email = "rowing@yopmail.com",
                     Active = true,
+                    Type = "Empresa",
                 });
 
                 _context.Companies.Add(new Company
@@ -106,6 +108,7 @@ namespace KPayBillApi.Web.Data
                     Phone = "011 22222222",
                     Email = "fleet@yopmail.com",
                     Active = true,
+                    Type = "Empresa",
                 });
                 await _context.SaveChangesAsync();
             }

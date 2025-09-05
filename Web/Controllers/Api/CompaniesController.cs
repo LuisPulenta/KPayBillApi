@@ -35,6 +35,7 @@ namespace KPayBillApi.Web.Controllers.Api
         public async Task<ActionResult<IEnumerable<Company>>> GetCompanies()
         {
             List<Company> companies = await _context.Companies
+                .Where(x => x.Type == "Empresa")
               .OrderBy(x => x.Name)
               .ToListAsync();
 
@@ -120,7 +121,8 @@ namespace KPayBillApi.Web.Controllers.Api
                 Active = true,
                 Address = companyRequest.Address,
                 Phone = companyRequest.Phone,
-                Email = companyRequest.Email
+                Email = companyRequest.Email,
+                Type = companyRequest.Type
             };
 
             _context.Companies.Add(newCompany);

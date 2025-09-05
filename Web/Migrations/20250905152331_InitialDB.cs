@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Web.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialDb : Migration
+    public partial class InitialDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -36,7 +36,8 @@ namespace Web.Migrations
                     Address = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    Active = table.Column<bool>(type: "bit", nullable: false)
+                    Active = table.Column<bool>(type: "bit", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -327,22 +328,25 @@ namespace Web.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Companies_Cuil",
+                name: "IX_Companies_Cuil_Type",
                 table: "Companies",
-                column: "Cuil",
-                unique: true);
+                columns: new[] { "Cuil", "Type" },
+                unique: true,
+                filter: "[Type] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Companies_Email",
+                name: "IX_Companies_Email_Type",
                 table: "Companies",
-                column: "Email",
-                unique: true);
+                columns: new[] { "Email", "Type" },
+                unique: true,
+                filter: "[Type] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Companies_Name",
+                name: "IX_Companies_Name_Type",
                 table: "Companies",
-                column: "Name",
-                unique: true);
+                columns: new[] { "Name", "Type" },
+                unique: true,
+                filter: "[Type] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reasons_Name",

@@ -34,7 +34,9 @@ namespace KPayBillApi.Web.Data.Entities
 
         [Display(Name = "Activo")]
         public bool Active { get; set; }
+
+        [Display(Name = "Tipo")]
+        [MaxLength(10, ErrorMessage = "El campo {0} no puede tener más de {1} caracteres")]
+        public string Type { get; set; }
     }
 }
-
-

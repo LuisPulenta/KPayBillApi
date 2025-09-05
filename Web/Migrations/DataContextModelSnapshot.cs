@@ -150,16 +150,23 @@ namespace Web.Migrations
                         .HasMaxLength(12)
                         .HasColumnType("nvarchar(12)");
 
+                    b.Property<string>("Type")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("Cuil")
-                        .IsUnique();
+                    b.HasIndex("Cuil", "Type")
+                        .IsUnique()
+                        .HasFilter("[Type] IS NOT NULL");
 
-                    b.HasIndex("Email")
-                        .IsUnique();
+                    b.HasIndex("Email", "Type")
+                        .IsUnique()
+                        .HasFilter("[Type] IS NOT NULL");
 
-                    b.HasIndex("Name")
-                        .IsUnique();
+                    b.HasIndex("Name", "Type")
+                        .IsUnique()
+                        .HasFilter("[Type] IS NOT NULL");
 
                     b.ToTable("Companies");
                 });
