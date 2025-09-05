@@ -18,6 +18,7 @@ using KPayBillApi.Web.Data.Entities;
 using KPayBillApi.Web.Helpers;
 using KPayBillApi.Web.Models;
 using KPayBillApi.Web.Models.Request;
+using System.ComponentModel.Design;
 
 namespace KPayBillApi.Àpi.Controllers.Àpi
 {
@@ -332,6 +333,42 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
                 list.Add(userViewModel);
             }
             return Ok(list);
+        }
+
+        //-------------------------------------------------------------------------------------------------
+        [HttpGet]
+        [Route("GetUsersSupplier/{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<IEnumerable<User>>> GetUsersSupplier(int id)
+        {
+            List<UserCompany> usersCompany = await _context.UserCompanies
+                .Where(x => x.CompanyId == id)
+                .ToListAsync();
+
+            List<UserViewModel> users = [];
+
+            foreach (UserCompany userCompany in usersCompany)
+            {
+                User user = await _userHelper.GetUserAsync(new Guid(userCompany.UserId));
+
+                UserViewModel userViewModel = new UserViewModel
+                {
+                    Id = user.Id,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    UserTypeId = (int)user.UserType,
+                    UserTypeName = user.UserType.ToString(),
+                    Email = user.Email,
+                    EmailConfirm = user.EmailConfirmed,
+                    PhoneNumber = user.PhoneNumber,
+                    CompanyId = user.Company.Id,
+                    CompanyName = user.Company.Name,
+                    Active = user.Active,
+                };
+
+                users.Add(userViewModel);
+            }
+            return Ok(users);
         }
 
         //-------------------------------------------------------------------------------------------------
