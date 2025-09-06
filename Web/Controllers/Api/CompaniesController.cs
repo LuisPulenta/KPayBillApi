@@ -171,7 +171,7 @@ namespace KPayBillApi.Web.Controllers.Api
         {
             List<Company> companies = await _context.Companies
              .OrderBy(x => x.Name)
-             .Where(c => c.Active)
+             .Where(c => c.Active && c.Type == "Empresa")
              .ToListAsync();
 
             return Ok(companies);

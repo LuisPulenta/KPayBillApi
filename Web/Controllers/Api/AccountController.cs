@@ -19,6 +19,7 @@ using KPayBillApi.Web.Helpers;
 using KPayBillApi.Web.Models;
 using KPayBillApi.Web.Models.Request;
 using System.ComponentModel.Design;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace KPayBillApi.Àpi.Controllers.Àpi
 {
@@ -162,6 +163,85 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
             };
 
             return Ok(user2);
+        }
+
+        //-----------------------------------------------------------------------------------
+        [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Route("CreateUserSupplier")]
+        public async Task<ActionResult> CreateUserSupplier(RegisterRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            string userId = "";
+
+            try
+            {
+                User registroExistente = await _context.Users
+                    .Include(x => x.Company)
+                    .FirstOrDefaultAsync(p => p.Email == request.Email && p.UserType == UserType.User);
+
+                if (registroExistente != null)
+                {
+                    userId = registroExistente.Id;
+                }
+                else
+                {
+                    DateTime ahora = DateTime.Now;
+
+                    Company company = await _context.Companies.FirstOrDefaultAsync(o => o.Id == request.IdCompany);
+                    User createUser = await _userHelper.GetUserByIdAsync(request.CreateUserId);
+                    User lastChangeUser = await _userHelper.GetUserByIdAsync(request.LastChangeUserId);
+
+                    User user = new User
+                    {
+                        Email = request.Email,
+                        FirstName = request.FirstName,
+                        LastName = request.LastName,
+                        PhoneNumber = request.PhoneNumber,
+                        CompanyId = company.Id,
+                        Company = company,
+                        UserName = request.Email,
+                        UserType = request.IdUserType == 0
+                        ? UserType.AdminKP
+                        : request.IdUserType == 1
+                            ? UserType.Admin
+                            : request.IdUserType == 2
+                                ? UserType.Contable
+                                : UserType.User,
+                        Active = true,
+                    };
+
+                    await _userHelper.AddUserAsync(user, request.Password);
+                    await _userHelper.AddUserToRoleAsync(user, user.UserType.ToString());
+                    await SendConfirmationEmailAsync(user);
+
+                    userId = user.Id;
+                }
+
+                User usuario = await _context.Users
+                .Include(x => x.Company)
+                .FirstOrDefaultAsync(p => p.Id == request.CreateUserId);
+
+                UserCompany newUserCompany = new UserCompany
+                {
+                    Id = 0,
+                    CompanyId = usuario!.Company.Id!,
+                    CompanyName = usuario.Company.Name,
+                    UserId = userId,
+                };
+                _context.UserCompanies.Add(newUserCompany);
+                await _context.SaveChangesAsync();
+
+                return Ok(newUserCompany);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         //-------------------------------------------------------------------------------------------------
