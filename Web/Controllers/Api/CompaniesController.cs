@@ -58,22 +58,6 @@ namespace KPayBillApi.Web.Controllers.Api
         }
 
         //-----------------------------------------------------------------------------------
-        [HttpGet]
-        [Route("GetSupplierByCuil/{cuil}")]
-        public async Task<ActionResult<Company>> GetCompanyByCuil(string cuil)
-        {
-            Company company = await _context.Companies
-                .FirstOrDefaultAsync(p => p.Cuil == cuil && p.Type == "Proveedor");
-
-            if (company == null)
-            {
-                return NotFound();
-            }
-
-            return company;
-        }
-
-        //-----------------------------------------------------------------------------------
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCompany(int id, CompanyRequest companyRequest)
         {
@@ -191,59 +175,6 @@ namespace KPayBillApi.Web.Controllers.Api
              .ToListAsync();
 
             return Ok(companies);
-        }
-
-        //-----------------------------------------------------------------------------------
-        [HttpPost]
-        [Route("AddUserCompany/{UserId}/{CompanyId}")]
-        public async Task<ActionResult> AddUserCompany(string userId, int companyId)
-        {
-            UserCompany newUserCompany = new UserCompany
-            {
-                Id = 0,
-                UserId = userId,
-                CompanyId = companyId,
-            };
-
-            _context.UserCompanies.Add(newUserCompany);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-                return Ok(newUserCompany);
-            }
-            catch (DbUpdateException dbUpdateException)
-            {
-                if (dbUpdateException.InnerException.Message.Contains("duplicada"))
-                {
-                    return BadRequest("Ya existe esta Empresa en este Usuario.");
-                }
-                else
-                {
-                    return BadRequest(dbUpdateException.InnerException.Message);
-                }
-            }
-            catch (Exception exception)
-            {
-                return BadRequest(exception.Message);
-            }
-        }
-
-        //-----------------------------------------------------------------------------------
-        [HttpPost]
-        [Route("DeleteUserCompany/{UserId}/{CompanyId}")]
-        public async Task<ActionResult> DeleteUserCompany(string userId, int companyId)
-        {
-            UserCompany userCompany = await _context.UserCompanies.FirstOrDefaultAsync(t => t.UserId == userId && t.CompanyId == companyId);
-            if (userCompany == null)
-            {
-                return NotFound();
-            }
-
-            _context.UserCompanies.Remove(userCompany);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
         }
     }
 }

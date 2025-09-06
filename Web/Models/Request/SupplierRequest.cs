@@ -9,8 +9,6 @@
         public string Phone { get; set; }
         public string Email { get; set; }
         public bool Active { get; set; }
-        public int FromCompanyId { get; set; }
-        public string FromCompanyName { get; set; }
         public int ForCompanyId { get; set; }
         public string ForCompanyName { get; set; }
     }

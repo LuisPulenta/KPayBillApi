@@ -108,11 +108,43 @@ namespace KPayBillApi.Web.Controllers.Api
 
         //-----------------------------------------------------------------------------------
         [HttpPost]
-        public async Task<ActionResult<Supplier>> PostSupplier(SupplierRequest supplierRequest)
+        public async Task<ActionResult> PostSupplier(SupplierRequest supplierRequest)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+
+            int empresaId = 0;
+            string empresaName = "";
+            try { 
+
+            Company registroExistente = await _context.Companies
+                .FirstOrDefaultAsync(p => p.Cuil == supplierRequest.Cuil && p.Type == "Proveedor");
+
+            if (registroExistente != null)
+            {
+                empresaId = registroExistente.Id;
+                empresaName = registroExistente.Name;
+            }
+            else
+            {
+                Company newCompany = new Company
+                {
+                    Id = 0,
+                    Cuil = supplierRequest.Cuil,
+                    Name = supplierRequest.Name,
+                    Active = true,
+                    Address = supplierRequest.Address,
+                    Phone = supplierRequest.Phone,
+                    Email = supplierRequest.Email,
+                    Type = "Proveedor"
+                };
+
+                _context.Companies.Add(newCompany);
+                await _context.SaveChangesAsync();
+                empresaId = newCompany.Id;
+                empresaName = newCompany.Name;
             }
 
             Supplier newSupplier = new Supplier
@@ -124,33 +156,20 @@ namespace KPayBillApi.Web.Controllers.Api
                 Address = supplierRequest.Address,
                 Phone = supplierRequest.Phone,
                 Email = supplierRequest.Email,
-                FromCompanyId = supplierRequest.FromCompanyId,
-                FromCompanyName = supplierRequest.FromCompanyName,
+                FromCompanyId = empresaId,
+                FromCompanyName = empresaName,
                 ForCompanyId = supplierRequest.ForCompanyId,
                 ForCompanyName = supplierRequest.ForCompanyName,
             };
 
-            _context.Suppliers.Add(newSupplier);
 
-            try
+            _context.Suppliers.Add(newSupplier);
+            await _context.SaveChangesAsync();
+            return Ok(newSupplier);
+        }
+            catch (Exception ex)
             {
-                await _context.SaveChangesAsync();
-                return Ok(newSupplier);
-            }
-            catch (DbUpdateException dbUpdateException)
-            {
-                if (dbUpdateException.InnerException.Message.Contains("duplicada"))
-                {
-                    return BadRequest("Ya existe esta Empresa.");
-                }
-                else
-                {
-                    return BadRequest(dbUpdateException.InnerException.Message);
-                }
-            }
-            catch (Exception exception)
-            {
-                return BadRequest(exception.Message);
+                return BadRequest(ex.Message);
             }
         }
 
