@@ -153,7 +153,7 @@ namespace KPayBillApi.Web.Controllers.Api
             }
             if (request.CompanyId != null)
             {
-                billsTemp = await _context.Bills
+                bills = await _context.Bills
                .Include(x => x.User)
                 .Where(x => x.ReceiverCompanyId == request.CompanyId && x.Estado == BillState.Recepcionado && x.BillDate >= request.Desde && x.BillDate <= request.Hasta.AddDays(1))
                 .OrderBy(x => x.Id)
