@@ -155,7 +155,7 @@ namespace KPayBillApi.Web.Controllers.Api
             {
                 billsTemp = await _context.Bills
                .Include(x => x.User)
-                .Where(x => x.EmitterCompanyId == request.CompanyId && x.Estado == BillState.Recepcionado && x.BillDate >= request.Desde && x.BillDate <= request.Hasta.AddDays(1))
+                .Where(x => x.ReceiverCompanyId == request.CompanyId && x.Estado == BillState.Recepcionado && x.BillDate >= request.Desde && x.BillDate <= request.Hasta.AddDays(1))
                 .OrderBy(x => x.Id)
                 .ToListAsync();
             }
