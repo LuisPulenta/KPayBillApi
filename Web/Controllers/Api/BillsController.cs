@@ -143,27 +143,19 @@ namespace KPayBillApi.Web.Controllers.Api
             User user = await _context.Users
                 .FirstOrDefaultAsync(p => p.Id == request.UserId);
 
-            if (request.UserType == 0)
-            {
-                bills = await _context.Bills
-                .Include(x => x.User)
-                .Where(x => x.Estado == BillState.Recepcionado && x.BillDate >= request.Desde && x.BillDate <= request.Hasta.AddDays(1))
-                .OrderBy(x => x.Id)
-                .ToListAsync();
-            }
-            if (request.UserType == 1)
-            {
-                billsTemp = await _context.Bills
-               .Include(x => x.User)
-                .Where(x => x.Estado == BillState.Recepcionado && x.BillDate >= request.Desde && x.BillDate <= request.Hasta.AddDays(1))
-                .OrderBy(x => x.Id)
-                .ToListAsync();
-            }
-            if (request.UserType == 2)
+            if (request.CompanyId == null)
             {
                 bills = await _context.Bills
                 .Include(x => x.User)
                 .Where(x => x.UserId == request.UserId && x.Estado == BillState.Recepcionado && x.BillDate >= request.Desde && x.BillDate <= request.Hasta.AddDays(1))
+                .OrderBy(x => x.Id)
+                .ToListAsync();
+            }
+            if (request.CompanyId != null)
+            {
+                billsTemp = await _context.Bills
+               .Include(x => x.User)
+                .Where(x => x.EmitterCompanyId == request.CompanyId && x.Estado == BillState.Recepcionado && x.BillDate >= request.Desde && x.BillDate <= request.Hasta.AddDays(1))
                 .OrderBy(x => x.Id)
                 .ToListAsync();
             }
