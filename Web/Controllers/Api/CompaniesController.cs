@@ -43,6 +43,27 @@ namespace KPayBillApi.Web.Controllers.Api
         }
 
         //-----------------------------------------------------------------------------------
+        [HttpPost]
+        [Route("GetCompaniesAssigned/{userId}")]
+        public async Task<ActionResult<IEnumerable<Company>>> GetCompaniesAssigned(string userId)
+        {
+            List<UserCompany> userCompanies = await _context.UserCompanies
+                .Where(x => x.UserId == userId)
+              .ToListAsync();
+
+            List<Company> companies = [];
+
+            foreach (var userCompany in userCompanies)
+            {
+                Company company = await _context.Companies
+                .FirstOrDefaultAsync(p => p.Id == userCompany.CompanyId);
+                companies.Add(company);
+            }
+
+            return Ok(companies);
+        }
+
+        //-----------------------------------------------------------------------------------
         [HttpGet("{id}")]
         public async Task<ActionResult<Company>> GetCompany(int id)
         {
