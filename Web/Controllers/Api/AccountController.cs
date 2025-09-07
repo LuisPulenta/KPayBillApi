@@ -570,7 +570,7 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
 
         {
             List<User> users = await _context.Users
-                .Where(x => x.Company.Id == CompanyId && x.UserType == UserType.Admin && x.Active)
+                .Where(x => x.Company.Id == CompanyId && x.UserType == UserType.Contable && x.Active)
                 .ToListAsync();
 
             string emailsAdmins = "";
