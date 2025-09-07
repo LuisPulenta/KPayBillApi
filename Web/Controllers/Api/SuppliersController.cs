@@ -36,7 +36,7 @@ namespace KPayBillApi.Web.Controllers.Api
         [Route("GetSuppliers/{companyId}")]
         public async Task<ActionResult<IEnumerable<Supplier>>> GetSuppliers(int companyId)
         {
-            List<Supplier> suppliers = await _context.Suppliers
+            List<VistaSupplier> suppliers = await _context.VistaSuppliers
                .Where(x => x.ForCompanyId == companyId)
               .OrderBy(x => x.Name)
               .ToListAsync();
@@ -117,19 +117,37 @@ namespace KPayBillApi.Web.Controllers.Api
 
             int empresaId = 0;
             string empresaName = "";
-            try { 
-
-            Company registroExistente = await _context.Companies
-                .FirstOrDefaultAsync(p => p.Cuil == supplierRequest.Cuil && p.Type == "Proveedor");
-
-            if (registroExistente != null)
+            try
             {
-                empresaId = registroExistente.Id;
-                empresaName = registroExistente.Name;
-            }
-            else
-            {
-                Company newCompany = new Company
+                Company registroExistente = await _context.Companies
+                    .FirstOrDefaultAsync(p => p.Cuil == supplierRequest.Cuil && p.Type == "Proveedor");
+
+                if (registroExistente != null)
+                {
+                    empresaId = registroExistente.Id;
+                    empresaName = registroExistente.Name;
+                }
+                else
+                {
+                    Company newCompany = new Company
+                    {
+                        Id = 0,
+                        Cuil = supplierRequest.Cuil,
+                        Name = supplierRequest.Name,
+                        Active = true,
+                        Address = supplierRequest.Address,
+                        Phone = supplierRequest.Phone,
+                        Email = supplierRequest.Email,
+                        Type = "Proveedor"
+                    };
+
+                    _context.Companies.Add(newCompany);
+                    await _context.SaveChangesAsync();
+                    empresaId = newCompany.Id;
+                    empresaName = newCompany.Name;
+                }
+
+                Supplier newSupplier = new Supplier
                 {
                     Id = 0,
                     Cuil = supplierRequest.Cuil,
@@ -138,35 +156,16 @@ namespace KPayBillApi.Web.Controllers.Api
                     Address = supplierRequest.Address,
                     Phone = supplierRequest.Phone,
                     Email = supplierRequest.Email,
-                    Type = "Proveedor"
+                    FromCompanyId = empresaId,
+                    FromCompanyName = empresaName,
+                    ForCompanyId = supplierRequest.ForCompanyId,
+                    ForCompanyName = supplierRequest.ForCompanyName,
                 };
 
-                _context.Companies.Add(newCompany);
+                _context.Suppliers.Add(newSupplier);
                 await _context.SaveChangesAsync();
-                empresaId = newCompany.Id;
-                empresaName = newCompany.Name;
+                return Ok(newSupplier);
             }
-
-            Supplier newSupplier = new Supplier
-            {
-                Id = 0,
-                Cuil = supplierRequest.Cuil,
-                Name = supplierRequest.Name,
-                Active = true,
-                Address = supplierRequest.Address,
-                Phone = supplierRequest.Phone,
-                Email = supplierRequest.Email,
-                FromCompanyId = empresaId,
-                FromCompanyName = empresaName,
-                ForCompanyId = supplierRequest.ForCompanyId,
-                ForCompanyName = supplierRequest.ForCompanyName,
-            };
-
-
-            _context.Suppliers.Add(newSupplier);
-            await _context.SaveChangesAsync();
-            return Ok(newSupplier);
-        }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);

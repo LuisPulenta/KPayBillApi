@@ -13,6 +13,7 @@ namespace KPayBillApi.Web.Data
 
         public DbSet<Company> Companies { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
+        public DbSet<VistaSupplier> VistaSuppliers { get; set; }
         public DbSet<Bill> Bills { get; set; }
         public DbSet<Reason> Reasons { get; set; }
         public DbSet<UserCompany> UserCompanies { get; set; }
