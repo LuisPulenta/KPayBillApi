@@ -86,62 +86,12 @@ namespace KPayBillApi.Web.Controllers.Api
 
         //-----------------------------------------------------------------------------------
         [HttpPost]
-        [Route("GetBillsPendientesAdmin/{userId}")]
-        public async Task<ActionResult<IEnumerable<Bill>>> GetBillsPendientesAdmin(string userId)
+        [Route("GetBillsPendientesAdmin/{companyId}")]
+        public async Task<ActionResult<IEnumerable<Bill>>> GetBillsPendientesAdmin(int companyId)
         {
             List<Bill> bills = await _context.Bills
                 .Include(x => x.User)
-                .Where(x => x.Estado == BillState.Enviado)
-              .OrderBy(x => x.Id)
-              .ToListAsync();
-
-            User user = await _context.Users
-                .FirstOrDefaultAsync(p => p.Id == userId);
-
-            List<BillViewModel> list = new List<BillViewModel>();
-
-            foreach (Bill bill in bills)
-            {
-                BillViewModel billViewModel = new BillViewModel
-                {
-                    Id = bill.Id,
-                    EmitterCompanyId = bill.EmitterCompanyId,
-                    EmitterCompanyName = bill.EmitterCompanyName,
-                    ReceiverCompanyId = bill.ReceiverCompanyId,
-                    ReceiverCompanyName = bill.ReceiverCompanyName,
-                    UserId = bill.UserId,
-                    UserName = bill.User.FullName,
-                    Cuil = bill.Cuil,
-                    CreateDate = bill.CreateDate,
-                    BillDate = bill.BillDate,
-                    Tipo = bill.Tipo,
-                    Letra = bill.Letra,
-                    PV = bill.PV,
-                    Numero = bill.Numero,
-                    StrComprobante = bill.StrComprobante,
-                    ImporteNeto = bill.ImporteNeto,
-                    ImporteIVA = bill.ImporteIVA,
-                    ImporteTotal = bill.ImporteTotal,
-                    Archivo = bill.Archivo,
-                    OC = bill.OC,
-                    DocContable = bill.DocContable,
-                    Estado = bill.Estado,
-                    Motivo = bill.Motivo,
-                    NroDocRel = bill.NroDocRel,
-                };
-                list.Add(billViewModel);
-            }
-            return Ok(list);
-        }
-
-        //-----------------------------------------------------------------------------------
-        [HttpPost]
-        [Route("GetBillsPendientesAdminKP/{userId}")]
-        public async Task<ActionResult<IEnumerable<Bill>>> GetBillsPendientesAdminKP(string userId)
-        {
-            List<Bill> bills = await _context.Bills
-                .Include(x => x.User)
-                .Where(x => x.Estado == BillState.Enviado)
+                .Where(x => x.Estado == BillState.Enviado && x.ReceiverCompanyId == companyId)
               .OrderBy(x => x.Id)
               .ToListAsync();
 
@@ -176,7 +126,6 @@ namespace KPayBillApi.Web.Controllers.Api
                     Motivo = bill.Motivo,
                     NroDocRel = bill.NroDocRel,
                 };
-
                 list.Add(billViewModel);
             }
             return Ok(list);
