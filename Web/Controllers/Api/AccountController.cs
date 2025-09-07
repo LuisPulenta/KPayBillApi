@@ -337,7 +337,7 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
                     "ResetPassword",
                     "Account",
                     new { token = myToken }, protocol: HttpContext.Request.Scheme);
-                _mailHelper.SendMail(model.Email, "", "KPayBill - Reseteo de contraseña", $"<h1>KPayBill - Reseteo de contraseña</h1>" +
+                _mailHelper.SendMailSinCc(model.Email, "KPayBill - Reseteo de contraseña", $"<h1>KPayBill - Reseteo de contraseña</h1>" +
                     $"Para establecer una nueva contraseña haga clic en el siguiente enlace:</br></br>" +
                     $"<a href = \"{link}\">Cambio de Contraseña</a>");
                 return Ok("Las instrucciones para el cambio de contraseña han sido enviadas a su email.");
