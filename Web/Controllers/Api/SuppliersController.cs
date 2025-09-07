@@ -181,7 +181,9 @@ namespace KPayBillApi.Web.Controllers.Api
             {
                 return NotFound();
             }
+            Company company = await _context.Companies.FindAsync(supplier.FromCompanyId);
 
+            _context.Companies.Remove(company);
             _context.Suppliers.Remove(supplier);
             await _context.SaveChangesAsync();
 
