@@ -72,7 +72,7 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
 
                     if (result.Succeeded)
                     {
-                        //Verifica que la EMpresa del Usuario esté Activa
+                        //Verifica que la Empresa del Usuario esté Activa
                         if (!user2.Company.Active)
                         {
                             return BadRequest("Usuario de la Empresa " + user2.Company.Name + " que no está habilitada");
@@ -82,7 +82,7 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
                         List<UserCompany> userCompanies = await _context.UserCompanies
                .Where(x => x.UserId == user2.Id).ToListAsync();
 
-                        if (userCompanies.Count == 0)
+                        if (user2.UserType == UserType.User && userCompanies.Count == 0)
                         {
                             return BadRequest("No tiene Empresas asignadas");
                         }
