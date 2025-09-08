@@ -47,6 +47,9 @@ namespace KPayBillApi.Web.Controllers.Api
         [Route("GetCompaniesAssigned/{userId}")]
         public async Task<ActionResult<IEnumerable<Company>>> GetCompaniesAssigned(string userId)
         {
+            User user = await _context.Users
+                .FirstOrDefaultAsync(p => p.Id == userId);
+
             List<UserCompany> userCompanies = await _context.UserCompanies
                 .Where(x => x.UserId == userId)
               .ToListAsync();
@@ -57,7 +60,11 @@ namespace KPayBillApi.Web.Controllers.Api
             {
                 Company company = await _context.Companies
                 .FirstOrDefaultAsync(p => p.Id == userCompany.CompanyId);
-                if (company.Active)
+
+                Supplier supplier = await _context.Suppliers
+                .FirstOrDefaultAsync(p => p.ForCompanyId == company.Id && p.FromCompanyId == user.CompanyId);
+
+                if (company.Active && supplier.Active)
                 {
                     companies.Add(company);
                 }
