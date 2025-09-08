@@ -72,8 +72,13 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
 
                     if (result.Succeeded)
                     {
-                        Claim[] claims = new[]
+                        if (!user2.Company.Active)
                         {
+                            return BadRequest("Usuario de la Empresa " + user2.Company.Name + " que no está habilitada");
+                        }
+
+                        Claim[] claims = new[]
+                    {
                             new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                         };
