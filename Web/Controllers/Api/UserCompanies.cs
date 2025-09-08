@@ -44,9 +44,28 @@ namespace KPayBillApi.Web.Controllers.Api
         [HttpGet("{userId}")]
         public async Task<ActionResult<bool>> GetAssignedCompanies(string userId)
         {
-            List<UserCompany> userCompanies = await _context.UserCompanies
+            User user = await _context.Users
+                .FirstOrDefaultAsync(p => p.Id == userId);
+
+            List<UserCompany> userCompanies = [];
+
+            List<UserCompany> userCompaniesTemp = await _context.UserCompanies
                 .Where(x => x.UserId == userId)
               .ToListAsync();
+
+            foreach (var userCompanyTemp in userCompaniesTemp)
+            {
+                Company company = await _context.Companies
+                .FirstOrDefaultAsync(p => p.Id == userCompanyTemp.CompanyId);
+
+                Supplier supplier = await _context.Suppliers
+                .FirstOrDefaultAsync(p => p.ForCompanyId == company.Id && p.FromCompanyId == user.CompanyId);
+
+                if (company.Active && supplier.Active)
+                {
+                    userCompanies.Add(userCompanyTemp);
+                }
+            }
 
             if (userCompanies.Count > 0)
             {
