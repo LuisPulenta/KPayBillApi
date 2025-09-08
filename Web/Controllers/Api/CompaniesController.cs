@@ -56,8 +56,11 @@ namespace KPayBillApi.Web.Controllers.Api
             foreach (var userCompany in userCompanies)
             {
                 Company company = await _context.Companies
-                .FirstOrDefaultAsync(p => p.Id == userCompany.CompanyId && p.Active);
-                companies.Add(company);
+                .FirstOrDefaultAsync(p => p.Id == userCompany.CompanyId);
+                if (company.Active)
+                {
+                    companies.Add(company);
+                }
             }
 
             return Ok(companies);
