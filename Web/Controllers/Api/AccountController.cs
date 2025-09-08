@@ -79,8 +79,23 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
                         }
 
                         //Verifica si es Usuario que tenga Empresas asignadas
-                        List<UserCompany> userCompanies = await _context.UserCompanies
+                        List<UserCompany> userCompanies = [];
+                        List<UserCompany> userCompaniesTemp = await _context.UserCompanies
                .Where(x => x.UserId == user2.Id).ToListAsync();
+
+                        foreach (var userCompanyTemp in userCompaniesTemp)
+                        {
+                            Company comp = await _context.Companies
+                            .FirstOrDefaultAsync(p => p.Id == userCompanyTemp.CompanyId);
+
+                            Supplier supplier = await _context.Suppliers
+                            .FirstOrDefaultAsync(p => p.ForCompanyId == comp.Id && p.FromCompanyId == user.CompanyId);
+
+                            if (comp.Active && supplier.Active)
+                            {
+                                userCompanies.Add(userCompanyTemp);
+                            }
+                        }
 
                         if (user2.UserType == UserType.User && userCompanies.Count == 0)
                         {
