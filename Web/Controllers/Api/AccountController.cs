@@ -72,11 +72,21 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
 
                     if (result.Succeeded)
                     {
+                        //Verifica que la EMpresa del Usuario esté Activa
                         if (!user2.Company.Active)
                         {
                             return BadRequest("Usuario de la Empresa " + user2.Company.Name + " que no está habilitada");
                         }
 
+                        //Verifica si es Usuario que tenga Empresas asignadas
+                        List<UserCompany> userCompanies = await _context.UserCompanies
+               .Where(x => x.UserId == user2.Id).ToListAsync();
+
+                        if (userCompanies.Count == 0)
+                        {
+                            return BadRequest("No tiene Empresas asignadas");
+                        }
+                        //-------------------------------------------------------------------------
                         Claim[] claims = new[]
                     {
                             new Claim(JwtRegisteredClaimNames.Sub, user.Email),

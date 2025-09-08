@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace KPayBillApi.Web.Controllers.Api
 {
@@ -37,6 +38,24 @@ namespace KPayBillApi.Web.Controllers.Api
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        //-----------------------------------------------------------------------------------
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<bool>> GetAssignedCompanies(string userId)
+        {
+            List<UserCompany> userCompanies = await _context.UserCompanies
+                .Where(x => x.UserId == userId)
+              .ToListAsync();
+
+            if (userCompanies.Count > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
