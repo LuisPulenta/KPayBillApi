@@ -393,11 +393,13 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
             List<UserViewModel> list = new List<UserViewModel>();
 
             int? suppliers = 0;
+            int? pagadores = 0;
             int? usuarios = 0;
 
             foreach (User user in users)
             {
                 suppliers = 0;
+                pagadores = 0;
                 usuarios = 0;
 
                 foreach (VistaAdminSuppliersUsuario vistaAdminSuppliersUsuario in vistaAdminSuppliersUsuarios)
@@ -405,6 +407,7 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
                     if (vistaAdminSuppliersUsuario.Id == user.Id && vistaAdminSuppliersUsuario.CompanyId == user.CompanyId)
                     {
                         suppliers = vistaAdminSuppliersUsuario.Suppliers;
+                        pagadores = vistaAdminSuppliersUsuario.Pagadores;
                         usuarios = vistaAdminSuppliersUsuario.Usuarios;
                     }
                 }
@@ -423,6 +426,7 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
                     CompanyName = user.Company != null ? user.Company.Name : "KeyPress",
                     Active = user.Active,
                     Suppliers = suppliers,
+                    Pagadores = pagadores,
                     Usuarios = usuarios
                 };
 

@@ -15,6 +15,7 @@
         public bool Active { get; set; }
         public string FullName => $"{FirstName} {LastName}";
         public int? Suppliers { get; set; }
+        public int? Pagadores { get; set; }
         public int? Usuarios { get; set; }
     }
 }

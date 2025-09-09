@@ -9,6 +9,7 @@ namespace KPayBillApi.Web.Data.Entities
 
         public int CompanyId { get; set; }
         public int? Suppliers { get; set; }
+        public int? Pagadores { get; set; }
         public int? Usuarios { get; set; }
     }
 }
