@@ -387,9 +387,28 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
                  .OrderBy(x => x.Company.Name + x.LastName + x.FirstName)
                 .ToListAsync();
 
+            List<VistaAdminSuppliersUsuario> vistaAdminSuppliersUsuarios = await _context.VistaAdminSuppliersUsuarios
+               .ToListAsync();
+
             List<UserViewModel> list = new List<UserViewModel>();
+
+            int? suppliers = 0;
+            int? usuarios = 0;
+
             foreach (User user in users)
             {
+                suppliers = 0;
+                usuarios = 0;
+
+                foreach (VistaAdminSuppliersUsuario vistaAdminSuppliersUsuario in vistaAdminSuppliersUsuarios)
+                {
+                    if (vistaAdminSuppliersUsuario.Id == user.Id && vistaAdminSuppliersUsuario.CompanyId == user.CompanyId)
+                    {
+                        suppliers = vistaAdminSuppliersUsuario.Suppliers;
+                        usuarios = vistaAdminSuppliersUsuario.Usuarios;
+                    }
+                }
+
                 UserViewModel userViewModel = new UserViewModel
                 {
                     Id = user.Id,
@@ -403,6 +422,8 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
                     CompanyId = user.Company != null ? user.Company.Id : 1,
                     CompanyName = user.Company != null ? user.Company.Name : "KeyPress",
                     Active = user.Active,
+                    Suppliers = suppliers,
+                    Usuarios = usuarios
                 };
 
                 list.Add(userViewModel);
