@@ -463,6 +463,9 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
                     CompanyId = user.Company != null ? user.Company.Id : 1,
                     CompanyName = user.Company != null ? user.Company.Name : "KeyPress",
                     Active = user.Active,
+                    Suppliers = null,
+                    Pagadores = null,
+                    Usuarios = null
                 };
 
                 list.Add(userViewModel);
@@ -508,6 +511,9 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
                             CompanyId = user2.Company.Id,
                             CompanyName = user2.Company.Name,
                             Active = user2.Active,
+                            Suppliers = null,
+                            Pagadores = null,
+                            Usuarios = null
                         };
 
                         users2.Add(userViewModel);
@@ -562,6 +568,9 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
                 CompanyId = user.Company != null ? user.Company.Id : 1,
                 CompanyName = user.Company != null ? user.Company.Name : "KeyPress",
                 Active = user.Active,
+                Suppliers = null,
+                Pagadores = null,
+                Usuarios = null
             };
 
             return userViewModel;
