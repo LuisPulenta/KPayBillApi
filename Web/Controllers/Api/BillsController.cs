@@ -271,7 +271,7 @@ namespace KPayBillApi.Web.Controllers.Api
                 var guid = Guid.NewGuid().ToString();
                 var file = $"{billRequest.ReceiverCompanyName}-{billRequest.StrComprobante}-{guid}.pdf";
                 var folder = $"wwwroot\\images\\Documents\\{billRequest.ReceiverCompanyName}";
-                var fullPath = $"~/images/Documents/{file}";
+                var fullPath = $"~/images/Documents/{billRequest.ReceiverCompanyName}/{file}";
                 var response = _filesHelper.UploadPhoto(stream, folder, file);
 
                 if (response)
@@ -390,7 +390,7 @@ namespace KPayBillApi.Web.Controllers.Api
                 var guid = Guid.NewGuid().ToString();
                 var file = $"{billRequest.ReceiverCompanyName}-{billRequest.StrComprobante}-{guid}.pdf";
                 var folder = $"wwwroot\\images\\Documents\\{billRequest.ReceiverCompanyName}";
-                var fullPath = $"~/images/Documents/{file}";
+                var fullPath = $"~/images/Documents/{billRequest.ReceiverCompanyName}/{file}";
                 var response = _filesHelper.UploadPhoto(stream, folder, file);
 
                 if (response)
