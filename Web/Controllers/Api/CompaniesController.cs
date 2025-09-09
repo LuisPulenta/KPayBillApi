@@ -34,8 +34,7 @@ namespace KPayBillApi.Web.Controllers.Api
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Company>>> GetCompanies()
         {
-            List<Company> companies = await _context.Companies
-                .Where(x => x.Type == "Empresa")
+            List<VistaCompany> companies = await _context.VistaCompanies
               .OrderBy(x => x.Name)
               .ToListAsync();
 
