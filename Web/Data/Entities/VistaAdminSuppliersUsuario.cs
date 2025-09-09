@@ -11,5 +11,6 @@ namespace KPayBillApi.Web.Data.Entities
         public int? Suppliers { get; set; }
         public int? Pagadores { get; set; }
         public int? Usuarios { get; set; }
+        public int? Documents { get; set; }
     }
 }

@@ -18,8 +18,6 @@ using KPayBillApi.Web.Data.Entities;
 using KPayBillApi.Web.Helpers;
 using KPayBillApi.Web.Models;
 using KPayBillApi.Web.Models.Request;
-using System.ComponentModel.Design;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace KPayBillApi.Àpi.Controllers.Àpi
 {
@@ -68,6 +66,10 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
                         CompanyId = company.Id,
                         CompanyName = company.Name,
                         Active = user2.Active,
+                        Usuarios = null,
+                        Pagadores = null,
+                        Suppliers = null,
+                        Documents = null
                     };
 
                     if (result.Succeeded)
@@ -190,6 +192,10 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
                 CompanyId = user.Company != null ? user.Company.Id : 1,
                 CompanyName = user.Company != null ? user.Company.Name : "KeyPress",
                 Active = user.Active,
+                Usuarios = null,
+                Pagadores = null,
+                Suppliers = null,
+                Documents = null
             };
 
             return Ok(user2);
@@ -395,12 +401,14 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
             int? suppliers = 0;
             int? pagadores = 0;
             int? usuarios = 0;
+            int? documents = 0;
 
             foreach (User user in users)
             {
                 suppliers = 0;
                 pagadores = 0;
                 usuarios = 0;
+                documents = 0;
 
                 foreach (VistaAdminSuppliersUsuario vistaAdminSuppliersUsuario in vistaAdminSuppliersUsuarios)
                 {
@@ -409,6 +417,7 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
                         suppliers = vistaAdminSuppliersUsuario.Suppliers;
                         pagadores = vistaAdminSuppliersUsuario.Pagadores;
                         usuarios = vistaAdminSuppliersUsuario.Usuarios;
+                        documents = vistaAdminSuppliersUsuario.Documents;
                     }
                 }
 
@@ -427,7 +436,8 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
                     Active = user.Active,
                     Suppliers = suppliers,
                     Pagadores = pagadores,
-                    Usuarios = usuarios
+                    Usuarios = usuarios,
+                    Documents = documents
                 };
 
                 list.Add(userViewModel);
@@ -465,7 +475,8 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
                     Active = user.Active,
                     Suppliers = null,
                     Pagadores = null,
-                    Usuarios = null
+                    Usuarios = null,
+                    Documents = null
                 };
 
                 list.Add(userViewModel);
@@ -513,7 +524,8 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
                             Active = user2.Active,
                             Suppliers = null,
                             Pagadores = null,
-                            Usuarios = null
+                            Usuarios = null,
+                            Documents = null,
                         };
 
                         users2.Add(userViewModel);
@@ -570,7 +582,8 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
                 Active = user.Active,
                 Suppliers = null,
                 Pagadores = null,
-                Usuarios = null
+                Usuarios = null,
+                Documents = null
             };
 
             return userViewModel;
