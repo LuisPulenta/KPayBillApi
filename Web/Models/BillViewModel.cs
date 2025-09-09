@@ -8,7 +8,6 @@ namespace KPayBillApi.Web.Models
 {
     public class BillViewModel
     {
-
         public int Id { get; set; }
         public int EmitterCompanyId { get; set; }
         public string EmitterCompanyName { get; set; }
@@ -33,12 +32,9 @@ namespace KPayBillApi.Web.Models
         public BillState Estado { get; set; }
         public string Motivo { get; set; }
         public string NroDocRel { get; set; }
+
         public string ArchivoFullPath => string.IsNullOrEmpty(Archivo)
         ? $"https://gaos2.keypress.com.ar/KPayBillApi/images/documents/noimage.png"
-        : $"https://gaos2.keypress.com.ar/KPayBillApi{Archivo.Substring(1)}";       
+        : $"https://gaos2.keypress.com.ar/KPayBillApi/{ReceiverCompanyName}{Archivo.Substring(1)}";
     }
 }
-
-
-
-
