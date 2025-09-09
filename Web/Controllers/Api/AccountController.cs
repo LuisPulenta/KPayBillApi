@@ -501,7 +501,13 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
                 .Where(x => x.CompanyId == companyId)
                 .ToListAsync();
 
+            List<VistaUserDocument> vistaUserDocuments = await _context.VistaUserDocuments
+                .Where(x => x.EmitterCompanyId == supplierId && x.ReceiverCompanyId == companyId)
+                .ToListAsync();
+
             List<UserViewModel> users2 = [];
+
+            int? documents = 0;
 
             foreach (User user2 in users)
             {
@@ -509,6 +515,14 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
                 {
                     if (user2.Id == userCompany.UserId)
                     {
+                        foreach (VistaUserDocument vistaUserDocument in vistaUserDocuments)
+                        {
+                            if (vistaUserDocument.UserId == userCompany.UserId)
+                            {
+                                documents = vistaUserDocument.Documents;
+                            }
+                        }
+
                         UserViewModel userViewModel = new UserViewModel
                         {
                             Id = user2.Id,
@@ -525,7 +539,7 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
                             Suppliers = null,
                             Pagadores = null,
                             Usuarios = null,
-                            Documents = null,
+                            Documents = documents,
                         };
 
                         users2.Add(userViewModel);
