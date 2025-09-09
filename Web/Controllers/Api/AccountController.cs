@@ -517,7 +517,7 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
                     {
                         foreach (VistaUserDocument vistaUserDocument in vistaUserDocuments)
                         {
-                            if (vistaUserDocument.UserId == userCompany.UserId)
+                            if (vistaUserDocument.UserId == userCompany.UserId && vistaUserDocument.ReceiverCompanyId == userCompany.CompanyId)
                             {
                                 documents = vistaUserDocument.Documents;
                             }
@@ -543,6 +543,7 @@ namespace KPayBillApi.Àpi.Controllers.Àpi
                         };
 
                         users2.Add(userViewModel);
+                        documents = 0;
                     }
                 }
             }
