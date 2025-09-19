@@ -26,11 +26,11 @@ namespace KPayBillApi.Web.Data
             await CheckCompaniesAsync();
             Company keypress = await _context.Companies.FirstOrDefaultAsync(o => o.Id == 1);
             Company rowing = await _context.Companies.FirstOrDefaultAsync(o => o.Id == 2);
-            Company fleet = await _context.Companies.FirstOrDefaultAsync(o => o.Id == 3);
+            //Company fleet = await _context.Companies.FirstOrDefaultAsync(o => o.Id == 3);
             await CheckAdminKPAsync("Luis", "Núñez", "luisalbertonu@gmail.com", "351 681 4963", UserType.AdminKP, keypress);
             await CheckAdminKPAsync("Pablo", "Lacuadri", "pablo@yopmail.com", "351 111 1111", UserType.AdminKP, keypress);
             await CheckAdminKPAsync("Gonzalo", "Prieto", "gonzalo@yopmail.com", "011 1111 1111", UserType.Admin, rowing);
-            await CheckAdminKPAsync("Dario", "Fleet", "dario@yopmail.com", "011 1111 1112", UserType.Admin, fleet);
+            //await CheckAdminKPAsync("Dario", "Fleet", "dario@yopmail.com", "011 1111 1112", UserType.Admin, fleet);
         }
 
         //--------------------------------------------------------------------------------------------
