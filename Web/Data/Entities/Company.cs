@@ -28,7 +28,7 @@ namespace KPayBillApi.Web.Data.Entities
         public string Phone { get; set; }
 
         [Display(Name = "Email")]
-        [MaxLength(30, ErrorMessage = "El campo {0} no puede tener más de {1} caracteres")]
+        [MaxLength(50, ErrorMessage = "El campo {0} no puede tener más de {1} caracteres")]
         [Required(ErrorMessage = "El campo {0} es obligatorio")]
         public string Email { get; set; }
 
