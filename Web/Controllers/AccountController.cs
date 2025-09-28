@@ -18,7 +18,7 @@ namespace Vehicles2.Api.Controllers
         private readonly IImageHelper _imageHelper;
         private readonly IMailHelper _mailHelper;
 
-        public AccountController(DataContext context,IUserHelper userHelper,IImageHelper imageHelper,IMailHelper mailHelper)
+        public AccountController(DataContext context, IUserHelper userHelper, IImageHelper imageHelper, IMailHelper mailHelper)
         {
             _context = context;
             _userHelper = userHelper;
@@ -26,7 +26,6 @@ namespace Vehicles2.Api.Controllers
             _mailHelper = mailHelper;
         }
 
-       
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
             if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
@@ -49,7 +48,6 @@ namespace Vehicles2.Api.Controllers
             return View();
         }
 
-
         public IActionResult ResetPassword(string token)
         {
             return View();
@@ -60,7 +58,6 @@ namespace Vehicles2.Api.Controllers
         {
             User user = await _userHelper.GetUserAsync(model.UserName);
 
-           
             if (user != null)
             {
                 IdentityResult result = await _userHelper.ResetPasswordAsync(user, model.Token, model.Password);
